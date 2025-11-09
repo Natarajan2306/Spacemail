@@ -62,15 +62,25 @@ def login_view(request):
 
 
 def logout_view(request):
-    """User logout"""
+    """User logout - Only logs out the current user, does not affect other users"""
     if request.user.is_authenticated:
-        # Log logout activity
+        # Store user info before logout for logging
+        user = request.user
+        ip_address = request.META.get('REMOTE_ADDR')
+        
+        # Log logout activity before clearing session
         UserActivity.objects.create(
-            user=request.user,
+            user=user,
             activity_type='logout',
-            ip_address=request.META.get('REMOTE_ADDR')
+            ip_address=ip_address
         )
+        
+        # Clear only this user's session (Django's logout() handles this correctly)
+        # This will only affect the current request's session, not other users
         logout(request)
+        
+        # Explicitly flush session to ensure it's cleared
+        request.session.flush()
     return redirect('login')
 
 
@@ -1611,6 +1621,21 @@ def test_smtp_connection(request):
             # Store credentials in session
             request.session['smtp_username'] = username
             request.session['smtp_password'] = password
+            
+            # Save as system provider
+            from email_app.models import SystemProviderSettings
+            SystemProviderSettings.objects.update_or_create(
+                provider_type='spacemail',
+                defaults={
+                    'smtp_server': 'mail.spacemail.com',
+                    'smtp_port': 465,
+                    'smtp_username': username,
+                    'smtp_password': password,
+                    'is_active': True,
+                    'updated_by': request.user
+                }
+            )
+            
             return JsonResponse({
                 'success': True,
                 'message': 'Connection successful!'
@@ -1666,6 +1691,21 @@ def test_gmail_connection(request):
             request.session['gmail_username'] = username
             request.session['gmail_password'] = password
             request.session['gmail_port'] = port
+            
+            # Save as system provider
+            from email_app.models import SystemProviderSettings
+            SystemProviderSettings.objects.update_or_create(
+                provider_type='gmail',
+                defaults={
+                    'smtp_server': 'smtp.gmail.com',
+                    'smtp_port': port,
+                    'smtp_username': username,
+                    'smtp_password': password,
+                    'is_active': True,
+                    'updated_by': request.user
+                }
+            )
+            
             return JsonResponse({
                 'success': True,
                 'message': 'Connection successful!'
@@ -2740,9 +2780,9 @@ def delete_campaign(request, campaign_id):
 
 @login_required
 def email_report(request):
-    """Email report page - Admin only"""
-    # Check if user is admin
-    if not (request.user.is_staff or request.user.is_superuser):
+    """Email report page - Only for users who can view all data"""
+    # Check if user can view all data (not just staff/superuser)
+    if not can_view_all_data(request.user):
         return redirect('dashboard')
     
     # Get filter parameters
@@ -2840,9 +2880,9 @@ def email_report(request):
 
 @login_required
 def campaign_report(request):
-    """Campaign report page - Admin only"""
-    # Check if user is admin
-    if not (request.user.is_staff or request.user.is_superuser):
+    """Campaign report page - Only for users who can view all data"""
+    # Check if user can view all data (not just staff/superuser)
+    if not can_view_all_data(request.user):
         return redirect('dashboard')
     
     # Get filter parameters
@@ -2950,7 +2990,7 @@ def campaign_report(request):
 def send_report_api(request):
     """API endpoint to send report via email - Admin only"""
     # Check if user is admin
-    if not (request.user.is_staff or request.user.is_superuser):
+    if not can_view_all_data(request.user):
         return JsonResponse({
             'success': False,
             'error': 'Permission denied'

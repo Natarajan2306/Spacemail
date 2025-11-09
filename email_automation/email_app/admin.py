@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.db.models import Q
-from email_app.models import Contact, Campaign, EmailLog, UserActivity, BounceRecord, UserProfile
+from email_app.models import Contact, Campaign, EmailLog, UserActivity, BounceRecord, UserProfile, SystemProviderSettings
 
 
 def can_view_all_data(user):
@@ -122,20 +122,6 @@ class EmailLogAdmin(admin.ModelAdmin):
         return super().get_queryset(request).filter(campaign__created_by=request.user)
 
 
-@admin.register(UserActivity)
-class UserActivityAdmin(admin.ModelAdmin):
-    list_display = ['user', 'activity_type', 'timestamp', 'ip_address']
-    list_filter = ['activity_type', 'timestamp']
-    readonly_fields = ['timestamp']
-    search_fields = ['user__username']
-    
-    def get_queryset(self, request):
-        # Check if user can view all data - if yes, return ALL data with NO filtering
-        if can_view_all_data(request.user):
-            # Return completely unfiltered queryset
-            return self.model.objects.all()
-        # Only filter if user cannot view all data
-        return super().get_queryset(request).filter(user=request.user)
 
 
 @admin.register(BounceRecord)
@@ -157,4 +143,34 @@ class BounceRecordAdmin(admin.ModelAdmin):
             Q(email_log__campaign__created_by=request.user) |
             Q(email_log__isnull=True, recipient_email__in=user_email_logs)
         )
+
+
+@admin.register(SystemProviderSettings)
+class SystemProviderSettingsAdmin(admin.ModelAdmin):
+    """Admin for System Provider Settings"""
+    list_display = ['provider_type', 'smtp_username', 'smtp_server', 'smtp_port', 'is_active', 'updated_at', 'updated_by']
+    list_filter = ['provider_type', 'is_active', 'updated_at']
+    search_fields = ['smtp_username', 'smtp_server']
+    readonly_fields = ['updated_at']
+    
+    fieldsets = (
+        ('Provider Information', {
+            'fields': ('provider_type', 'is_active')
+        }),
+        ('SMTP Settings', {
+            'fields': ('smtp_server', 'smtp_port', 'smtp_username', 'smtp_password')
+        }),
+        ('Metadata', {
+            'fields': ('updated_at', 'updated_by')
+        }),
+    )
+    
+    def save_model(self, request, obj, form, change):
+        # Set updated_by to current user
+        if not obj.updated_by:
+            obj.updated_by = request.user
+        # If setting as active, deactivate other providers
+        if obj.is_active:
+            SystemProviderSettings.objects.filter(is_active=True).exclude(pk=obj.pk).update(is_active=False)
+        super().save_model(request, obj, form, change)
 

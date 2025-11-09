@@ -152,3 +152,35 @@ class UserActivity(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.activity_type} at {self.timestamp}"
 
+
+class SystemProviderSettings(models.Model):
+    """System-wide default email provider settings for automated tasks"""
+    provider_type = models.CharField(
+        max_length=20,
+        choices=[
+            ('spacemail', 'SpaceMail'),
+            ('gmail', 'Gmail'),
+        ],
+        default='spacemail'
+    )
+    smtp_server = models.CharField(max_length=255, default='mail.spacemail.com')
+    smtp_port = models.IntegerField(default=465)
+    smtp_username = models.EmailField()
+    smtp_password = models.CharField(max_length=255)  # Encrypted in production
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'System Provider Settings'
+        verbose_name_plural = 'System Provider Settings'
+        ordering = ['-updated_at']
+    
+    def __str__(self):
+        return f"{self.provider_type} - {self.smtp_username} ({'Active' if self.is_active else 'Inactive'})"
+    
+    @classmethod
+    def get_active_provider(cls):
+        """Get the active system provider settings"""
+        return cls.objects.filter(is_active=True).first()
+

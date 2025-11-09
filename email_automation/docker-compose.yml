@@ -7,6 +7,8 @@ services:
       - static_volume:/app/staticfiles
     environment:
       - PYTHONUNBUFFERED=1
+      # Credentials are set in Dockerfile, but can be overridden here if needed
+      # - SENDER_PASSWORD=your_password_here
     ports:
       - "8002:8000"
     networks:

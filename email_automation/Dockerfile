@@ -4,6 +4,26 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# Django Settings
+ENV SECRET_KEY=django-insecure-change-this-in-production
+ENV DEBUG=True
+ENV ALLOWED_HOSTS=localhost,127.0.0.1,spacemail.pdevsecops.com
+
+# Email Settings (SpaceMail) - Defaults
+ENV SMTP_SERVER=mail.spacemail.com
+ENV SMTP_PORT=465
+ENV SENDER_EMAIL=natty@pdsolearn.com
+
+# IMAP Settings for Bounce Detection
+ENV IMAP_SERVER=mail.spacemail.com
+ENV IMAP_PORT=993
+
+# Gmail Settings (optional)
+ENV GMAIL_CLIENT_ID=
+ENV GMAIL_CLIENT_SECRET=
+ENV GMAIL_REFRESH_TOKEN=
+ENV GMAIL_ACCESS_TOKEN=
+
 # Set work directory
 WORKDIR /app
 

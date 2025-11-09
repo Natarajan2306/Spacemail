@@ -54,6 +54,15 @@ else:
 CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+# Session configuration - ensure each user has independent sessions
+SESSION_COOKIE_NAME = 'sessionid'  # Default session cookie name
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to session cookie
+SESSION_COOKIE_SAMESITE = 'Lax'  # CSRF protection
+SESSION_SAVE_EVERY_REQUEST = False  # Only save session when modified
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Session persists after browser close
+# Ensure sessions are stored in database (not shared cache)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Application definition
 INSTALLED_APPS = [

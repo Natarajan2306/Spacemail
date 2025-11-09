@@ -1,0 +1,7 @@
+The .github folder exists in the root directory.
+It contains:
+- workflows/ (for GitHub Actions)
+- ISSUE_TEMPLATE/ (bug reports and feature requests)
+- PULL_REQUEST_TEMPLATE.md
+
+To view it in your IDE, enable "Show Hidden Files" in file explorer settings.
