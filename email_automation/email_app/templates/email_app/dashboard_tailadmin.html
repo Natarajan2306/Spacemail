@@ -1,0 +1,3005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SpaceMail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #c5c7c9;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            padding-top: 140px;
+        }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding-top: 200px;
+            }
+        }
+        @media (max-width: 640px) {
+            .content-wrapper {
+                padding-top: 210px;
+            }
+        }
+        .glass, .glass-card, .card-purple, .card-pink, .card-blue, .card-green, .card-orange, .card-yellow, .card-violet {
+            border-top: none;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: visible;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+        }
+        .card-purple {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #667eea;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .card-purple::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .card-pink {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #f093fb;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .card-pink::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .card-blue {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #4facfe;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .card-blue::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .card-green {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #48bb78;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .card-green::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .card-orange {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #fb923c;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .card-orange::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .card-yellow {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #fbbf24;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .card-yellow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .card-violet {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #a78bfa;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .card-violet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(90deg, #a78bfa 0%, #8b5cf6 100%);
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .icon-purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .icon-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .icon-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .icon-green {
+            background: linear-gradient(135deg, #48bb78 0%, #10b981 100%);
+        }
+        .icon-orange {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+        }
+        .icon-yellow {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+        .btn-nav {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #667eea;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transition: left 0.4s ease;
+        }
+        .btn-nav:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border-color: rgba(102, 126, 234, 0.6);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            color: #4c51bf;
+        }
+        .btn-nav:hover::before {
+            left: 100%;
+        }
+        .btn-nav span {
+            position: relative;
+            z-index: 1;
+        }
+        .btn-logout {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+        }
+        .inner-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
+        }
+        .inner-card:hover {
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.15);
+        }
+        .circular-progress {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+        }
+        .circular-progress svg {
+            transform: rotate(-90deg);
+            width: 120px;
+            height: 120px;
+        }
+        .circular-progress circle {
+            fill: none;
+            stroke-width: 8;
+        }
+        .circular-progress .bg-circle {
+            stroke: rgba(0, 0, 0, 0.1);
+        }
+        .circular-progress .progress-circle {
+            stroke: url(#gradient);
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        .progress-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .progress-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.25);
+        }
+        /* Close dropdown when clicking outside */
+        body.click-outside {
+            cursor: default;
+        }
+        /* Campaign item styling */
+        .campaign-item {
+            position: relative;
+            z-index: 1;
+        }
+        /* Campaign progress bar */
+        .campaign-progress-container {
+            margin-top: 8px;
+            display: none;
+        }
+        .campaign-progress-container.active {
+            display: block;
+        }
+        .campaign-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        .campaign-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #f093fb 50%, #4facfe 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        .campaign-progress-text {
+            font-size: 10px;
+            color: #6b7280;
+            margin-top: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <!-- Navigation -->
+    <nav class="glass rounded-2xl p-4 md:p-6 mb-6 flex flex-col md:flex-row items-center gap-4 fixed top-0 left-4 right-4 z-50 mx-auto" style="max-width: calc(100% - 2rem);">
+        <div class="flex items-center space-x-4 md:absolute md:left-4">
+            <div class="p-3 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-xl shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-900">SpaceMail</h1>
+        </div>
+        <div class="flex items-center space-x-3 md:space-x-4 justify-center flex-1">
+            <button onclick="connectAndGoToGmail()" class="btn-nav px-6 py-3 rounded-xl">
+                <span>Gmail</span>
+            </button>
+            <button onclick="connectAndGoToSpaceMail()" class="btn-nav px-6 py-3 rounded-xl">
+                <span>SpaceMail</span>
+            </button>
+            {% if user.is_staff or user.is_superuser %}
+            <a href="{% url 'email_report' %}" class="btn-nav px-6 py-3 rounded-xl">
+                <span>Email Report</span>
+            </a>
+            {% endif %}
+        </div>
+        <div class="flex items-center space-x-2 md:space-x-3 md:absolute md:right-4">
+            {% if view_all %}
+            <!-- User Dropdown -->
+            <div class="relative" id="userDropdownContainer">
+                <button onclick="toggleUserDropdown()" id="userDropdownBtn" class="btn-nav px-4 py-2 rounded-xl flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span id="selectedUserName">{{ selected_user.username|default:user.username }}</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="userDropdown" class="hidden absolute right-0 mt-2 w-56 glass rounded-xl shadow-lg z-50 max-h-96 overflow-y-auto">
+                    <div class="p-2">
+                        <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Select User</div>
+                        <div id="usersList" class="space-y-1">
+                            <!-- Users will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <span class="text-gray-700 font-medium hidden md:inline">Welcome, {{ user.username }}</span>
+            <a href="{% url 'logout' %}" class="btn-logout text-white font-semibold px-4 py-2 rounded-xl shadow-lg">
+                Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+    <!-- Circular Progress Bar Card -->
+    <div id="progressCard" class="glass-card rounded-2xl p-6 mb-6 hidden progress-card">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="circular-progress">
+                    <svg width="120" height="120">
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#f093fb;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="bg-circle" cx="60" cy="60" r="45"></circle>
+                        <circle id="progressCircle" class="progress-circle" cx="60" cy="60" r="45"></circle>
+                    </svg>
+                    <div class="progress-text">
+                        <span id="progressText" class="text-2xl font-bold text-gray-900">0%</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1" id="progressTitle">Email Sending Progress</h3>
+                    <p id="progressCampaignName" class="text-sm font-semibold text-purple-600 mb-1 hidden"></p>
+                    <p id="progressMessage" class="text-sm text-gray-600">Preparing to send...</p>
+                    <p id="progressDetails" class="text-xs text-gray-500 mt-1"></p>
+                    <p id="progressCompletedTime" class="text-xs text-gray-400 mt-1 font-semibold hidden"></p>
+                </div>
+            </div>
+            <button onclick="closeProgressCard()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <!-- Total Emails -->
+        <div class="glass-card card-purple rounded-2xl p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm mb-1 font-medium">Total Emails</p>
+                    <p id="stat-total-emails" class="text-4xl font-extrabold text-gray-900">{{ total_emails }}</p>
+                </div>
+                <div class="w-14 h-14 icon-purple rounded-xl flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaigns Sent -->
+        <div class="glass-card card-pink rounded-2xl p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm mb-1 font-medium">Campaigns Sent</p>
+                    <p id="stat-campaigns-sent" class="text-4xl font-extrabold text-gray-900">{{ campaigns_sent }}</p>
+                </div>
+                <div class="w-14 h-14 icon-pink rounded-xl flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bounce Emails -->
+        <div class="glass-card card-violet rounded-2xl p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm mb-1 font-medium">Bounce Emails</p>
+                    <p id="stat-bounce-emails-card" class="text-4xl font-extrabold text-gray-900">{{ bounce_emails|default:"0" }}</p>
+                </div>
+                <div class="w-14 h-14 icon-purple rounded-xl flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Campaigns -->
+        <div class="glass-card card-green rounded-2xl p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm mb-1 font-medium">Active Campaigns</p>
+                    <p id="stat-active-campaigns" class="text-4xl font-extrabold text-gray-900">{{ active_campaigns }}</p>
+                </div>
+                <div class="w-14 h-14 icon-green rounded-xl flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Cards Grid - Proper Alignment -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 items-start">
+        <!-- Left Column -->
+        <div class="space-y-6">
+            <!-- Email Status Card -->
+            <div class="glass-card card-orange rounded-2xl p-5">
+                <h3 class="text-gray-900 font-bold text-lg mb-3 flex items-center">
+                    <span class="w-2 h-2 bg-orange-400 rounded-full mr-2"></span>
+                    Email Status
+                </h3>
+                <div class="space-y-2.5">
+                    <div class="status-filter-item flex items-center justify-between p-2.5 inner-card rounded-xl cursor-pointer hover:bg-white/80 transition-all" data-status="sent">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                            <span class="text-gray-900 font-semibold">Sent</span>
+                        </div>
+                        <span id="stat-sent-emails" class="text-gray-900 font-bold text-xl">{{ sent_emails }}</span>
+                    </div>
+                    <div class="status-filter-item flex items-center justify-between p-2.5 inner-card rounded-xl cursor-pointer hover:bg-white/80 transition-all" data-status="bounce">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-violet-400 rounded-full"></div>
+                            <span class="text-gray-900 font-semibold">Bounce</span>
+                        </div>
+                        <span id="stat-bounce-emails" class="text-gray-900 font-bold text-xl">{{ bounce_emails|default:"0" }}</span>
+                    </div>
+                    <div class="status-filter-item flex items-center justify-between p-2.5 inner-card rounded-xl cursor-pointer hover:bg-white/80 transition-all" data-status="failed">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                            <span class="text-gray-900 font-semibold">Failed</span>
+                        </div>
+                        <span id="stat-failed-emails" class="text-gray-900 font-bold text-xl">{{ failed_emails }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Campaign Statistics Graph Card -->
+            <div class="glass-card card-blue rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-gray-900 font-bold text-lg flex items-center">
+                        <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                        <span id="graphTitle">Campaign Statistics Graph</span>
+                    </h3>
+                    <button id="toggleOverallBtn" onclick="toggleOverallStatistics()" class="hidden px-3 py-1.5 bg-gradient-to-r from-blue-400 to-cyan-400 text-white text-xs font-semibold rounded-lg hover:shadow-lg transition-all">
+                        Show Overall
+                    </button>
+                </div>
+                <div id="graphContainer" class="mt-0">
+                    <div class="text-center text-gray-500 text-sm py-2">
+                        Click a campaign name to view statistics
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Campaigns Card -->
+            <div class="glass-card card-purple rounded-2xl p-6 relative" style="margin-top: 2.5rem;">
+                <h3 class="text-gray-900 font-bold text-lg mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
+                    Recent Campaigns
+                </h3>
+                <div id="campaignsContainer" class="space-y-3 max-h-80 overflow-y-auto" style="overflow-x: visible;">
+                {% for campaign in recent_campaigns %}
+                <div class="campaign-item inner-card rounded-xl p-4 transition-all hover:bg-white/80 relative group" data-campaign-id="{{ campaign.id }}" data-campaign-name="{{ campaign.name|escapejs }}" {% if campaign.status == 'sending' and campaign.start_time_iso %}data-start-time="{{ campaign.start_time_iso }}"{% endif %}>
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1 cursor-pointer campaign-clickable">
+                            <p class="text-gray-900 font-bold mb-1">{{ campaign.name }}</p>
+                            <p class="text-gray-600 text-sm mb-2">{{ campaign.subject }}</p>
+                            <div class="flex items-center space-x-2 flex-wrap gap-1">
+                                <p class="text-gray-500 text-xs">{{ campaign.created_at|date:"M d, Y" }}</p>
+                                <span class="px-2 py-0.5 rounded-full text-xs font-semibold 
+                                    {% if campaign.status == 'completed' %}bg-green-100 text-green-800 border border-green-300
+                                    {% elif campaign.status == 'sending' %}bg-blue-100 text-blue-800 border border-blue-300
+                                    {% elif campaign.status == 'failed' %}bg-red-100 text-red-800 border border-red-300
+                                    {% else %}bg-gray-100 text-gray-800 border border-gray-300{% endif %}">
+                                    {{ campaign.status }}
+                                </span>
+                            </div>
+                            <!-- Campaign Progress Bar -->
+                            <div class="campaign-progress-container" id="campaign-progress-{{ campaign.id }}">
+                                <div class="campaign-progress-bar">
+                                    <div class="campaign-progress-fill" id="campaign-progress-fill-{{ campaign.id }}"></div>
+                                </div>
+                                <div class="campaign-progress-text" id="campaign-progress-text-{{ campaign.id }}">0%</div>
+                            </div>
+                            <!-- Timing Display - Always show for sending or completed campaigns -->
+                            {% if campaign.status == 'sending' or campaign.completed_at %}
+                            <div class="mt-1 space-y-0.5" id="campaign-timing-{{ campaign.id }}">
+                                {% if campaign.status == 'sending' %}
+                                <p class="text-gray-500 text-xs">
+                                    <span class="font-semibold">Running:</span> <span id="elapsed-time-{{ campaign.id }}">{% if campaign.elapsed_str %}{{ campaign.elapsed_str }}{% else %}Calculating...{% endif %}</span>
+                                </p>
+                                {% elif campaign.completed_at %}
+                                <p class="text-gray-500 text-xs">
+                                    <span class="font-semibold">Completed:</span> {{ campaign.completed_at|date:"M d, Y H:i:s" }}
+                                </p>
+                                {% if campaign.duration_str %}
+                                <p class="text-gray-500 text-xs">
+                                    <span class="font-semibold">Duration:</span> {{ campaign.duration_str }}
+                                </p>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <div class="mt-1 space-y-0.5" id="campaign-timing-{{ campaign.id }}" style="display: none;"></div>
+                            {% endif %}
+                        </div>
+                        <!-- Action Buttons -->
+                        <div class="flex items-center space-x-2 ml-3">
+                            <button 
+                                type="button"
+                                class="campaign-restart-btn p-2 hover:bg-green-100 rounded-lg transition-all group/restart"
+                                title="Restart Campaign"
+                                data-campaign-id="{{ campaign.id }}"
+                            >
+                                <svg class="w-5 h-5 text-green-600 group-hover/restart:text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            <button 
+                                type="button"
+                                class="campaign-pause-btn p-2 hover:bg-yellow-100 rounded-lg transition-all group/pause"
+                                title="Pause Campaign"
+                                data-campaign-id="{{ campaign.id }}"
+                            >
+                                <svg class="w-5 h-5 text-yellow-600 group-hover/pause:text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            <button 
+                                type="button"
+                                class="campaign-delete-btn p-2 hover:bg-red-100 rounded-lg transition-all group/delete"
+                                title="Delete Campaign"
+                                data-campaign-id="{{ campaign.id }}"
+                                data-campaign-name="{{ campaign.name|escapejs }}"
+                            >
+                                <svg class="w-5 h-5 text-red-600 group-hover/delete:text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-gray-500 text-sm text-center py-4">No campaigns yet</p>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="space-y-6">
+            <!-- Bounce Detector Card -->
+            <div class="glass-card card-violet rounded-2xl p-6">
+                <h3 class="text-gray-900 font-bold text-lg mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-violet-400 rounded-full mr-2"></span>
+                    Bounce Detector
+                </h3>
+                <div class="space-y-4">
+                    <button onclick="checkBounces()" id="bounceDetectorBtn" class="w-full px-4 py-3 bg-gradient-to-r from-violet-400 to-purple-400 text-white font-semibold rounded-xl hover:shadow-lg transition-all flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Check for Bounces
+                    </button>
+                    <div id="bounceResults" class="hidden">
+                        <div class="p-3 inner-card rounded-xl mb-3">
+                            <p class="text-gray-600 text-sm font-medium mb-1">Detection Results</p>
+                            <p id="bounceStats" class="text-gray-900 font-semibold text-sm"></p>
+                        </div>
+                        <div id="bounceEmailsList" class="space-y-2 max-h-64 overflow-y-auto">
+                            <!-- Bounce emails will be displayed here -->
+                        </div>
+                    </div>
+                    <div id="bounceLoading" class="hidden text-center py-4">
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-violet-600 mx-auto"></div>
+                        <p class="text-gray-600 text-sm mt-2">Checking for bounces...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Emails Card -->
+            <div class="glass-card card-pink rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-2">
+                        <h3 class="text-gray-900 font-bold text-lg flex items-center">
+                            <span class="w-2 h-2 bg-pink-400 rounded-full mr-2"></span>
+                            <span id="emailsTitle">Recent Emails</span>
+                        </h3>
+                        <span id="campaignFilterBadge" class="hidden px-2 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-lg flex items-center mr-2">
+                            <span id="filteredCampaignName"></span>
+                            <button onclick="clearCampaignFilter()" class="ml-2 text-purple-600 hover:text-purple-800">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </span>
+                        <span id="statusFilterBadge" class="hidden px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-lg flex items-center">
+                            <span id="filteredStatusName"></span>
+                            <button onclick="clearStatusFilter()" class="ml-2 text-orange-600 hover:text-orange-800">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="exportEmails('csv')" class="px-3 py-1.5 bg-gradient-to-r from-pink-400 to-red-400 text-white text-xs font-semibold rounded-lg hover:shadow-lg transition-all flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            CSV
+                        </button>
+                        <button onclick="exportEmails('json')" class="px-3 py-1.5 bg-gradient-to-r from-pink-400 to-red-400 text-white text-xs font-semibold rounded-lg hover:shadow-lg transition-all flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            JSON
+                        </button>
+                    </div>
+                </div>
+                <div id="emailsContainer" class="space-y-3 max-h-80 overflow-y-auto">
+                {% for item in recent_emails_data %}
+                <div class="inner-card rounded-xl p-4 transition-all email-item cursor-pointer hover:bg-white/90" 
+                     data-email-id="{{ item.email.id }}" 
+                     data-campaign-id="{{ item.email.campaign.id|default:'' }}" 
+                     data-campaign-name="{{ item.email.campaign.name|default:'N/A'|escapejs }}" 
+                     data-email-status="{{ item.email.status }}">
+                    <p class="text-gray-900 font-bold text-sm mb-1">
+                        {% if item.contact and item.contact.first_name %}
+                            {{ item.contact.first_name }} ({{ item.email.recipient_email }})
+                        {% else %}
+                            {{ item.email.recipient_email }}
+                        {% endif %}
+                    </p>
+                    <p class="text-gray-600 text-xs truncate mb-2">{{ item.email.subject }}</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-500 text-xs">{{ item.email.sent_at|date:"M d, H:i" }}</span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold {% if item.email.status == 'sent' %}bg-green-100 text-green-800 border border-green-300{% elif item.email.status == 'bounce' %}bg-violet-100 text-violet-800 border border-violet-300{% else %}bg-red-100 text-red-800 border border-red-300{% endif %}">
+                            {{ item.email.status }}
+                        </span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-gray-500 text-sm text-center py-4">No emails sent yet</p>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Details Popup Modal -->
+    <div id="emailDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+            <button onclick="closeEmailDetailsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div id="emailDetailsContent">
+                <div class="flex items-center justify-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="emails-data" type="application/json">
+        {% autoescape off %}
+        [
+        {% for item in recent_emails_data %}
+        {
+            "First Name": "{% if item.contact %}{{ item.contact.first_name|default:""|escapejs }}{% else %}{% endif %}",
+            "Email": "{{ item.email.recipient_email|escapejs }}",
+            "Subject": "{{ item.email.subject|escapejs }}",
+            "Status": "{{ item.email.status }}",
+            "Sent At": "{{ item.email.sent_at|date:"Y-m-d H:i:s" }}",
+            "Campaign": "{{ item.email.campaign.name|default:"N/A"|escapejs }}",
+            "Campaign ID": {{ item.email.campaign.id|default:"null" }},
+            "Error Message": "{{ item.email.error_message|default:""|escapejs }}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+        ]
+        {% endautoescape %}
+    </script>
+
+    <script id="dashboard-config" type="application/json">
+        {% autoescape off %}
+        {
+            "viewAllEnabled": {% if view_all %}true{% else %}false{% endif %},
+            "selectedUserId": {% if selected_user %}{{ selected_user.id }}{% else %}{{ user.id }}{% endif %},
+            "currentUserId": {{ user.id }}
+        }
+        {% endautoescape %}
+    </script>
+
+    <script>
+        // Load configuration from JSON script tag
+        const dashboardConfig = JSON.parse(document.getElementById('dashboard-config').textContent);
+        const viewAllEnabled = dashboardConfig.viewAllEnabled;
+        let selectedUserId = dashboardConfig.selectedUserId;
+        const currentUserId = dashboardConfig.currentUserId;
+        
+        // Circular Progress Bar Functions
+        function updateCircularProgress(percent) {
+            const circle = document.getElementById('progressCircle');
+            const text = document.getElementById('progressText');
+            const circumference = 2 * Math.PI * 45; // radius = 45
+            const offset = circumference - (percent / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+            text.textContent = Math.round(percent) + '%';
+        }
+
+        function closeProgressCard() {
+            const progressCard = document.getElementById('progressCard');
+            progressCard.classList.add('hidden');
+            const completedTimeEl = document.getElementById('progressCompletedTime');
+            const progressCampaignName = document.getElementById('progressCampaignName');
+            const progressTitle = document.getElementById('progressTitle');
+            if (completedTimeEl) {
+                completedTimeEl.classList.add('hidden');
+                completedTimeEl.textContent = '';
+            }
+            if (progressCampaignName) {
+                progressCampaignName.classList.add('hidden');
+                progressCampaignName.textContent = '';
+            }
+            if (progressTitle) {
+                progressTitle.textContent = 'Email Sending Progress';
+            }
+            // Circular progress bar will update automatically with all sending campaigns
+            sessionStorage.removeItem('emailSending');
+            sessionStorage.removeItem('emailMessage');
+            sessionStorage.removeItem('emailResults');
+            sessionStorage.removeItem('emailFormData');
+            sessionStorage.removeItem('emailData');
+            sessionStorage.removeItem('csvFileData');
+            sessionStorage.removeItem('csvFileName');
+            sessionStorage.removeItem('attachmentFileData');
+            sessionStorage.removeItem('attachmentFileName');
+        }
+
+        // Check for email sending status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailSending = sessionStorage.getItem('emailSending');
+            const emailFormData = sessionStorage.getItem('emailFormData');
+            const emailDataStr = sessionStorage.getItem('emailData');
+            
+            if (emailSending === 'true' && emailFormData === 'pending' && emailDataStr) {
+                const progressCard = document.getElementById('progressCard');
+                const progressMessage = document.getElementById('progressMessage');
+                const progressDetails = document.getElementById('progressDetails');
+                const progressCampaignName = document.getElementById('progressCampaignName');
+                const progressTitle = document.getElementById('progressTitle');
+                
+                // Show progress card
+                progressCard.classList.remove('hidden');
+                
+                try {
+                    const emailData = JSON.parse(emailDataStr);
+                    
+                    // Show campaign name if available
+                    if (emailData.campaign_name) {
+                        if (progressTitle) {
+                            progressTitle.textContent = 'Campaign Progress';
+                        }
+                        if (progressCampaignName) {
+                            progressCampaignName.textContent = emailData.campaign_name;
+                            progressCampaignName.classList.remove('hidden');
+                        }
+                    } else {
+                        if (progressTitle) {
+                            progressTitle.textContent = 'Email Sending Progress';
+                        }
+                        if (progressCampaignName) {
+                            progressCampaignName.classList.add('hidden');
+                        }
+                    }
+                    
+                    progressMessage.textContent = 'Sending emails...';
+                    
+                    // Calculate total recipients for progress tracking
+                    let totalRecipients = 1; // Default for single email
+                    let progressInterval = null;
+                    
+                    if (emailData.emailType === 'bulk') {
+                        const csvFileData = sessionStorage.getItem('csvFileData');
+                        if (csvFileData) {
+                            try {
+                                // Parse CSV to get total count
+                                const csvText = atob(csvFileData.split(',')[1]);
+                                const lines = csvText.split('\n').filter(line => line.trim());
+                                totalRecipients = Math.max(1, lines.length - 1); // Subtract header row
+                            } catch (e) {
+                                console.error('Error parsing CSV:', e);
+                            }
+                        }
+                    }
+                    
+                    // Initialize progress
+                    updateCircularProgress(0);
+                    progressDetails.textContent = `0 / ${totalRecipients} emails`;
+                    
+                    // Prepare form data
+                    const formData = new FormData();
+                    formData.append('campaign_name', emailData.campaign_name || '');
+                    formData.append('to_email', emailData.to_email || '');
+                    formData.append('cc', emailData.cc || '');
+                    formData.append('subject', emailData.subject);
+                    formData.append('body', emailData.body);
+                    formData.append('attributes', emailData.attributes || '');
+                    
+                    if (emailData.is_html) {
+                        formData.append('is_html', 'true');
+                    }
+                    
+                    if (emailData.emailType === 'bulk') {
+                        formData.append('use_csv', 'true');
+                        // Handle CSV file if stored
+                        const csvFileData = sessionStorage.getItem('csvFileData');
+                        if (csvFileData) {
+                            // Convert base64 to blob
+                            const csvBlob = dataURLtoBlob(csvFileData);
+                            formData.append('csv_file', csvBlob, sessionStorage.getItem('csvFileName') || 'recipients.csv');
+                        }
+                    }
+                    
+                    // Handle attachment if stored
+                    const attachmentFileData = sessionStorage.getItem('attachmentFileData');
+                    if (attachmentFileData) {
+                        const attachBlob = dataURLtoBlob(attachmentFileData);
+                        formData.append('attachment', attachBlob, sessionStorage.getItem('attachmentFileName') || 'attachment');
+                    }
+                    
+                    // Start progress estimation (for bulk emails, estimate based on time)
+                    let estimatedProgress = 0;
+                    const startTime = Date.now();
+                    const estimatedTimePerEmail = 2000; // 2 seconds per email (including delay)
+                    const estimatedTotalTime = totalRecipients * estimatedTimePerEmail;
+                    
+                    if (emailData.emailType === 'bulk' && totalRecipients > 1) {
+                        progressInterval = setInterval(() => {
+                            const elapsed = Date.now() - startTime;
+                            estimatedProgress = Math.min(95, (elapsed / estimatedTotalTime) * 100);
+                            updateCircularProgress(estimatedProgress);
+                            const estimatedSent = Math.floor((estimatedProgress / 100) * totalRecipients);
+                            progressDetails.textContent = `Sending... ${estimatedSent} / ${totalRecipients} emails`;
+                        }, 500);
+                    } else {
+                        // Single email - show simple progress
+                        updateCircularProgress(50);
+                        progressDetails.textContent = 'Sending email...';
+                    }
+                    
+                    // Send email
+                    fetch('{% url "send_email_api" %}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                        }
+                        
+                        if (data.success) {
+                            // Calculate actual progress using EXACT counts from backend
+                            let sentCount = 0;
+                            let failedCount = 0;
+                            let actualTotal = 0;
+                            
+                            if (data.results) {
+                                sentCount = data.results.sent ? data.results.sent.length : 0;
+                                failedCount = data.results.failed ? data.results.failed.length : 0;
+                                actualTotal = sentCount + failedCount;
+                            } else {
+                                // Single email success
+                                sentCount = 1;
+                                actualTotal = 1;
+                            }
+                            
+                            // Use actual total from backend, not estimated from CSV
+                            const actualProgress = actualTotal > 0 ? 100 : 0;
+                            
+                            updateCircularProgress(actualProgress);
+                            progressMessage.textContent = data.message || 'Emails sent successfully!';
+                            progressDetails.textContent = `Sent: ${sentCount} | Failed: ${failedCount} | Total: ${actualTotal}`;
+                            
+                            // Show completion time in circular progress bar
+                            const completedTimeEl = document.getElementById('progressCompletedTime');
+                            if (completedTimeEl) {
+                                const now = new Date();
+                                const completedTime = now.toLocaleString('en-US', { 
+                                    month: 'short', 
+                                    day: 'numeric', 
+                                    year: 'numeric', 
+                                    hour: '2-digit', 
+                                    minute: '2-digit', 
+                                    second: '2-digit',
+                                    hour12: false 
+                                });
+                                completedTimeEl.textContent = `Completed: ${completedTime}`;
+                                completedTimeEl.classList.remove('hidden');
+                            }
+                            
+                            // Clean up sessionStorage
+                            sessionStorage.removeItem('emailFormData');
+                            sessionStorage.removeItem('emailData');
+                            sessionStorage.removeItem('csvFileData');
+                            sessionStorage.removeItem('csvFileName');
+                            sessionStorage.removeItem('attachmentFileData');
+                            sessionStorage.removeItem('attachmentFileName');
+                            
+                            // Immediately refresh dashboard to show new emails and campaign (don't wait for campaign end)
+                            if (sentCount > 0 || failedCount > 0) {
+                                // Refresh immediately to show updated email list and campaign
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000); // Small delay to ensure backend has saved data
+                            } else {
+                                // Auto-hide after 2 seconds if no emails were sent
+                                setTimeout(() => {
+                                    closeProgressCard();
+                                }, 2000);
+                            }
+                        } else {
+                            updateCircularProgress(100);
+                            progressMessage.textContent = 'Error: ' + (data.error || 'Failed to send email');
+                            progressDetails.textContent = 'Please try again';
+                            setTimeout(() => {
+                                closeProgressCard();
+                            }, 5000);
+                        }
+                    })
+                    .catch(error => {
+                        if (progressInterval) {
+                            clearInterval(progressInterval);
+                        }
+                        updateCircularProgress(100);
+                        progressMessage.textContent = 'Error: ' + error.message;
+                        progressDetails.textContent = 'Please try again';
+                        setTimeout(() => {
+                            closeProgressCard();
+                        }, 5000);
+                    });
+                } catch (error) {
+                    progressMessage.textContent = 'Error processing email data';
+                    progressDetails.textContent = error.message;
+                }
+            } else if (emailSending === 'true') {
+                // Already sent - just clear and show updated dashboard (emails already reflected)
+                sessionStorage.removeItem('emailSending');
+                sessionStorage.removeItem('emailMessage');
+                sessionStorage.removeItem('emailResults');
+                sessionStorage.removeItem('emailFormData');
+                sessionStorage.removeItem('emailData');
+                // Don't show progress card - emails are already in the dashboard
+            }
+        });
+        
+        // Helper function to convert data URL to blob
+        function dataURLtoBlob(dataurl) {
+            const arr = dataurl.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], {type:mime});
+        }
+        
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        // Filter emails by campaign and status
+        let currentCampaignFilter = null;
+        let currentStatusFilter = null;
+        
+        // Use event delegation for campaign buttons and email cards (works with dynamically added elements)
+        document.addEventListener('DOMContentLoaded', function() {
+            const campaignsContainer = document.getElementById('campaignsContainer');
+            const emailsContainer = document.getElementById('emailsContainer');
+            
+            // Event listener for email cards
+            if (emailsContainer) {
+                emailsContainer.addEventListener('click', function(e) {
+                    const emailItem = e.target.closest('.email-item');
+                    if (emailItem) {
+                        // Don't trigger if clicking on status badge
+                        if (!e.target.closest('.px-3')) {
+                            const emailId = emailItem.getAttribute('data-email-id');
+                            if (emailId) {
+                                showEmailDetails(parseInt(emailId));
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Single event listener for all campaign container clicks
+            if (campaignsContainer) {
+                campaignsContainer.addEventListener('click', function(e) {
+                    // Check for button clicks first (highest priority)
+                    const restartBtn = e.target.closest('.campaign-restart-btn');
+                    const pauseBtn = e.target.closest('.campaign-pause-btn');
+                    const deleteBtn = e.target.closest('.campaign-delete-btn');
+                    
+                    if (restartBtn) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const campaignId = restartBtn.getAttribute('data-campaign-id');
+                        console.log('Restart button clicked, campaign ID:', campaignId);
+                        if (campaignId) {
+                            restartCampaign(campaignId);
+                        }
+                        return;
+                    }
+                    
+                    if (pauseBtn) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const campaignId = pauseBtn.getAttribute('data-campaign-id');
+                        console.log('Pause button clicked, campaign ID:', campaignId);
+                        console.log('Pause button element:', pauseBtn);
+                        console.log('Pause button classes:', pauseBtn.className);
+                        if (campaignId) {
+                            pauseCampaign(campaignId);
+                        } else {
+                            console.error('No campaign ID found on pause button');
+                            alert('Error: No campaign ID found');
+                        }
+                        return;
+                    }
+                    
+                    if (deleteBtn) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const campaignId = deleteBtn.getAttribute('data-campaign-id');
+                        const campaignName = deleteBtn.getAttribute('data-campaign-name');
+                        console.log('Delete button clicked, campaign ID:', campaignId);
+                        if (campaignId) {
+                            deleteCampaign(campaignId, campaignName);
+                        }
+                        return;
+                    }
+                    
+                    // If no button clicked, check for campaign clickable area
+                    const campaignClickable = e.target.closest('.campaign-clickable');
+                    if (campaignClickable) {
+                        const campaignItem = campaignClickable.closest('.campaign-item');
+                        const campaignIdAttr = campaignItem.getAttribute('data-campaign-id');
+                        const campaignName = campaignItem.getAttribute('data-campaign-name');
+                        // Parse campaign ID, handling both string and number
+                        const campaignId = campaignIdAttr ? parseInt(campaignIdAttr) : null;
+                        if (campaignId) {
+                            filterEmailsByCampaign(campaignName, campaignId);
+                            // Toggle graph: if same campaign clicked, show overall; otherwise show campaign stats
+                            toggleCampaignGraph(campaignId, campaignName);
+                        }
+                    }
+                });
+            }
+            
+            // Status filter items
+            const statusItems = document.querySelectorAll('.status-filter-item');
+            statusItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const status = this.getAttribute('data-status');
+                    filterEmailsByStatus(status);
+                });
+            });
+            
+        });
+        
+        // Helper function to update campaign status in UI
+        function updateCampaignStatusUI(campaignId, newStatus) {
+            const campaignItem = document.querySelector(`.campaign-item[data-campaign-id="${campaignId}"]`);
+            if (campaignItem) {
+                const statusBadge = campaignItem.querySelector('span[class*="rounded-full"]');
+                if (statusBadge) {
+                    // Remove all status classes
+                    statusBadge.className = 'px-2 py-0.5 rounded-full text-xs font-semibold';
+                    
+                    // Add appropriate status classes
+                    if (newStatus === 'completed') {
+                        statusBadge.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-300');
+                    } else if (newStatus === 'sending') {
+                        statusBadge.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-300');
+                    } else if (newStatus === 'failed') {
+                        statusBadge.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-300');
+                    } else {
+                        statusBadge.classList.add('bg-gray-100', 'text-gray-800', 'border', 'border-gray-300');
+                    }
+                    
+                    statusBadge.textContent = newStatus;
+                }
+            }
+        }
+        
+        // Helper function to remove campaign from UI
+        function removeCampaignFromUI(campaignId) {
+            const campaignItem = document.querySelector(`.campaign-item[data-campaign-id="${campaignId}"]`);
+            if (campaignItem) {
+                campaignItem.remove();
+            }
+        }
+        
+        // Update campaign card progress bar
+        function updateCampaignProgress(campaignId, percent, text) {
+            const progressContainer = document.getElementById(`campaign-progress-${campaignId}`);
+            const progressFill = document.getElementById(`campaign-progress-fill-${campaignId}`);
+            const progressText = document.getElementById(`campaign-progress-text-${campaignId}`);
+            
+            if (progressContainer && progressFill && progressText) {
+                if (percent > 0) {
+                    progressContainer.classList.add('active');
+                    progressFill.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+                    progressText.textContent = text || `${Math.round(percent)}%`;
+                } else {
+                    progressContainer.classList.remove('active');
+                }
+            }
+            
+            // Ensure timing div is visible for sending campaigns
+            const timingDiv = document.getElementById(`campaign-timing-${campaignId}`);
+            if (timingDiv && percent > 0) {
+                // Check if campaign is sending
+                const campaignItem = document.querySelector(`.campaign-item[data-campaign-id="${campaignId}"]`);
+                if (campaignItem) {
+                    const statusBadge = campaignItem.querySelector('span[class*="rounded-full"]');
+                    if (statusBadge && statusBadge.textContent.trim() === 'sending') {
+                        timingDiv.style.display = 'block';
+                        // Ensure elapsed time element exists
+                        let elapsedEl = document.getElementById(`elapsed-time-${campaignId}`);
+                        if (!elapsedEl) {
+                            timingDiv.innerHTML = `<p class="text-gray-500 text-xs">
+                                <span class="font-semibold">Running:</span> <span id="elapsed-time-${campaignId}">Calculating...</span>
+                            </p>`;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Poll all sending campaigns and update circular progress bar with total data
+        async function updateCircularProgressBarWithAllCampaigns() {
+            try {
+                // Get all campaigns from dashboard API
+                let apiUrl = '{% url "dashboard_api" %}';
+                if (viewAllEnabled && selectedUserId) {
+                    apiUrl += `?user_id=${selectedUserId}`;
+                }
+                const response = await fetch(apiUrl);
+                const result = await response.json();
+                
+                if (result.success && result.data && result.data.recent_campaigns) {
+                    const sendingCampaigns = result.data.recent_campaigns.filter(c => c.status === 'sending');
+                    
+                    if (sendingCampaigns.length === 0) {
+                        // No sending campaigns - hide progress bar if no active campaign
+                        const progressCard = document.getElementById('progressCard');
+                        if (progressCard && !progressCard.classList.contains('hidden')) {
+                            // Check if it was manually opened, if so keep it
+                            // Otherwise, it will be hidden when all campaigns complete
+                        }
+                        return;
+                    }
+                    
+                    // Aggregate data from all sending campaigns
+                    let totalSent = 0;
+                    let totalFailed = 0;
+                    let totalEmails = 0;
+                    const campaignNames = [];
+                    
+                    // Poll each sending campaign for progress
+                    for (const campaign of sendingCampaigns) {
+                        try {
+                            const progressResponse = await fetch(`/api/campaign/${campaign.id}/progress/`);
+                            const progressResult = await progressResponse.json();
+                            
+                            if (progressResult.success && progressResult.data) {
+                                const { total_emails, sent_count, failed_count } = progressResult.data;
+                                totalSent += sent_count;
+                                totalFailed += failed_count;
+                                totalEmails += total_emails;
+                                campaignNames.push(campaign.name);
+                                
+                                // Update individual campaign card progress (independent)
+                                const progress = total_emails > 0 ? (sent_count / total_emails) * 100 : 0;
+                                updateCampaignProgress(campaign.id, progress, `${sent_count} / ${total_emails} (${Math.round(progress)}%)`);
+                            }
+                        } catch (error) {
+                            console.error(`Error polling campaign ${campaign.id}:`, error);
+                        }
+                    }
+                    
+                    // Update circular progress bar with total data
+                    const progress = totalEmails > 0 ? (totalSent / totalEmails) * 100 : 0;
+                    const progressCard = document.getElementById('progressCard');
+                    const progressDetails = document.getElementById('progressDetails');
+                    const progressMessage = document.getElementById('progressMessage');
+                    const progressCampaignName = document.getElementById('progressCampaignName');
+                    const progressTitle = document.getElementById('progressTitle');
+                    
+                    if (progressCard && progressDetails && progressMessage) {
+                        // Show progress card if there are sending campaigns
+                        progressCard.classList.remove('hidden');
+                        
+                        if (progressTitle) {
+                            progressTitle.textContent = 'All Campaigns Progress';
+                        }
+                        
+                        if (progressCampaignName) {
+                            if (campaignNames.length === 1) {
+                                progressCampaignName.textContent = campaignNames[0];
+                            } else {
+                                // Show all campaign names when multiple
+                                progressCampaignName.textContent = `${campaignNames.length} Active Campaigns: ${campaignNames.join(', ')}`;
+                            }
+                            progressCampaignName.classList.remove('hidden');
+                        }
+                        
+                        progressMessage.textContent = 'Sending emails...';
+                        // Show combined data: (demo1 + demo2) sent / (demo1 + demo2) total
+                        progressDetails.textContent = `Sent: ${totalSent} | Failed: ${totalFailed} | Total: ${totalEmails}`;
+                        updateCircularProgress(progress);
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating circular progress bar:', error);
+            }
+        }
+        
+        // Poll campaign progress (for individual campaign card updates)
+        async function pollCampaignProgress(campaignId) {
+            try {
+                const response = await fetch(`/api/campaign/${campaignId}/progress/`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    const { total_emails, sent_count, failed_count, progress_percent, status } = result.data;
+                    
+                    // Calculate progress: (sent / total) * 100
+                    const progress = total_emails > 0 ? (sent_count / total_emails) * 100 : 0;
+                    
+                    // Update campaign card progress (independent - always updates)
+                    updateCampaignProgress(campaignId, progress, `${sent_count} / ${total_emails} (${Math.round(progress)}%)`);
+                    
+                    // Update circular progress bar with all sending campaigns data
+                    await updateCircularProgressBarWithAllCampaigns();
+                    
+                    // Update elapsed time display for sending campaigns
+                    if (status === 'sending') {
+                        const timingDiv = document.getElementById(`campaign-timing-${campaignId}`);
+                        const elapsedEl = document.getElementById(`elapsed-time-${campaignId}`);
+                        if (timingDiv && !elapsedEl) {
+                            // Timing div exists but elapsed element doesn't - create it
+                            timingDiv.innerHTML = `<p class="text-gray-500 text-xs">
+                                <span class="font-semibold">Running:</span> <span id="elapsed-time-${campaignId}">Calculating...</span>
+                            </p>`;
+                        }
+                        // Show timing div
+                        if (timingDiv) {
+                            timingDiv.style.display = 'block';
+                        }
+                    }
+                    
+                    // Update circular progress bar when campaign completes
+                    if (status === 'completed') {
+                        // Update circular progress bar to reflect remaining sending campaigns
+                        await updateCircularProgressBarWithAllCampaigns();
+                    }
+                    
+                    return { total_emails, sent_count, failed_count, progress, status };
+                }
+            } catch (error) {
+                console.error('Error polling campaign progress:', error);
+            }
+            return null;
+        }
+        
+        // Restart Campaign
+        async function restartCampaign(campaignId) {
+            console.log('restartCampaign called with ID:', campaignId);
+            try {
+                // Get campaign name for display
+                const campaignItem = document.querySelector(`.campaign-item[data-campaign-id="${campaignId}"]`);
+                const campaignName = campaignItem ? campaignItem.getAttribute('data-campaign-name') : 'Campaign';
+                
+                // Show progress bar on campaign card immediately (independent)
+                updateCampaignProgress(campaignId, 0, 'Starting...');
+                
+                // Show timing div immediately for sending campaign
+                const timingDiv = document.getElementById(`campaign-timing-${campaignId}`);
+                if (timingDiv) {
+                    timingDiv.style.display = 'block';
+                    let elapsedEl = document.getElementById(`elapsed-time-${campaignId}`);
+                    if (!elapsedEl) {
+                        timingDiv.innerHTML = `<p class="text-gray-500 text-xs">
+                            <span class="font-semibold">Running:</span> <span id="elapsed-time-${campaignId}">0s</span>
+                        </p>`;
+                    }
+                }
+                
+                // Update UI immediately
+                updateCampaignStatusUI(campaignId, 'sending');
+                
+                // Update circular progress bar with all sending campaigns (including this one)
+                await updateCircularProgressBarWithAllCampaigns();
+                
+                // Start polling for progress (every 2 seconds)
+                let progressInterval = setInterval(async () => {
+                    const progressData = await pollCampaignProgress(campaignId);
+                    // Stop polling if campaign is completed or paused
+                    if (progressData && (progressData.status === 'completed' || progressData.status === 'draft')) {
+                        clearInterval(progressInterval);
+                        // Update circular progress bar to reflect remaining campaigns
+                        await updateCircularProgressBarWithAllCampaigns();
+                    }
+                }, 2000);
+                
+                // Start the restart API call (non-blocking)
+                const response = await fetch(`/api/campaign/${campaignId}/restart/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                // Clear the initial polling interval
+                clearInterval(progressInterval);
+                
+                if (data.success) {
+                    // Get actual counts from response
+                    let sentCount = data.sent_count || 0;
+                    let failedCount = data.failed_count || 0;
+                    let totalEmails = data.total_emails || data.total_sent || 0;
+                    
+                    // If counts not in response, calculate from results
+                    if (totalEmails === 0 && data.results) {
+                        sentCount = data.results.sent ? data.results.sent.length : 0;
+                        failedCount = data.results.failed ? data.results.failed.length : 0;
+                        totalEmails = sentCount + failedCount;
+                    }
+                    
+                    // Calculate progress: (sent / total) * 100
+                    const progress = totalEmails > 0 ? (sentCount / totalEmails) * 100 : 100;
+                    
+                    // Update both progress bars with actual results
+                    updateCircularProgress(progress);
+                    progressMessage.textContent = data.message || 'Campaign restarted successfully!';
+                    progressDetails.textContent = `Sent: ${sentCount} | Failed: ${failedCount} | Total: ${totalEmails}`;
+                    
+                    // Show completion time in circular progress bar
+                    const completedTimeEl = document.getElementById('progressCompletedTime');
+                    if (completedTimeEl) {
+                        const now = new Date();
+                        const completedTime = now.toLocaleString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric', 
+                            year: 'numeric', 
+                            hour: '2-digit', 
+                            minute: '2-digit', 
+                            second: '2-digit',
+                            hour12: false 
+                        });
+                        completedTimeEl.textContent = `Completed: ${completedTime}`;
+                        completedTimeEl.classList.remove('hidden');
+                    }
+                    
+                    updateCampaignProgress(campaignId, progress, `${sentCount} / ${totalEmails} (${Math.round(progress)}%)`);
+                    
+                    // Reload after a short delay to show updated data
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    updateCircularProgress(100);
+                    progressMessage.textContent = 'Error: ' + (data.error || 'Failed to restart campaign');
+                    progressDetails.textContent = 'Please try again';
+                    updateCampaignProgress(campaignId, 0, ''); // Hide progress on error
+                    setTimeout(() => {
+                        closeProgressCard();
+                    }, 3000);
+                }
+            } catch (error) {
+                const progressCard = document.getElementById('progressCard');
+                updateCampaignProgress(campaignId, 0, ''); // Hide progress on error
+                if (progressCard && !progressCard.classList.contains('hidden')) {
+                    updateCircularProgress(100);
+                    document.getElementById('progressMessage').textContent = 'Error: ' + error.message;
+                    document.getElementById('progressDetails').textContent = 'Please try again';
+                    setTimeout(() => {
+                        closeProgressCard();
+                    }, 3000);
+                } else {
+                    alert('Error: ' + error.message);
+                }
+            }
+            
+        }
+        
+        // Pause Campaign
+        async function pauseCampaign(campaignId) {
+            console.log('pauseCampaign called with ID:', campaignId);
+            if (!campaignId) {
+                console.error('No campaign ID provided to pauseCampaign');
+                alert('Error: No campaign ID provided');
+                return;
+            }
+            
+            try {
+                const csrfToken = getCookie('csrftoken');
+                if (!csrfToken) {
+                    console.error('CSRF token not found');
+                    alert('Error: CSRF token not found. Please refresh the page.');
+                    return;
+                }
+                
+                console.log('Sending pause request to:', `/api/campaign/${campaignId}/pause/`);
+                const response = await fetch(`/api/campaign/${campaignId}/pause/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('Pause response status:', response.status);
+                const data = await response.json();
+                console.log('Pause response data:', data);
+                
+                if (data.success) {
+                    // Update UI immediately
+                    updateCampaignStatusUI(campaignId, 'draft');
+                    // Hide progress bar when paused
+                    updateCampaignProgress(campaignId, 0, '');
+                    // Hide timing div when paused
+                    const timingDiv = document.getElementById(`campaign-timing-${campaignId}`);
+                    if (timingDiv) {
+                        timingDiv.style.display = 'none';
+                    }
+                    console.log('Campaign paused successfully');
+                } else {
+                    console.error('Pause failed:', data.error);
+                    alert('Error: ' + (data.error || 'Failed to pause campaign'));
+                }
+            } catch (error) {
+                console.error('Pause error:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        // Delete Campaign
+        async function deleteCampaign(campaignId, campaignName) {
+            console.log('deleteCampaign called with ID:', campaignId, 'Name:', campaignName);
+            try {
+                const response = await fetch(`/api/campaign/${campaignId}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                console.log('Delete response:', data);
+                
+                if (data.success) {
+                    // Remove from UI immediately
+                    removeCampaignFromUI(campaignId);
+                    // Reload after a short delay to refresh all data
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to delete campaign'));
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Error: ' + error.message);
+            }
+            
+        }
+        
+        // Store all campaign emails data for export
+        let campaignEmailsData = null;
+        
+        async function filterEmailsByCampaign(campaignName, campaignId) {
+            // Ensure campaignId is stored as a number for consistent comparison
+            currentCampaignFilter = campaignId ? parseInt(campaignId) : null;
+            
+            console.log('Filtering emails for campaign:', campaignName, 'ID:', campaignId);
+            
+            // Fetch all emails for this campaign (works for both sending and completed campaigns)
+            try {
+                const response = await fetch(`/api/campaign/${campaignId}/emails/`);
+                const result = await response.json();
+                
+                console.log('Campaign emails API response:', result);
+                
+                if (result.success && result.data) {
+                    const emails = result.data.emails || [];
+                    console.log(`Found ${emails.length} emails for campaign ${campaignId}`);
+                    
+                    // Store campaign emails data for export
+                    campaignEmailsData = emails.map(email => ({
+                        "First Name": email.first_name || "",
+                        "Email": email.recipient_email || "",
+                        "Subject": email.subject || "",
+                        "Status": email.status || "",
+                        "Sent At": email.sent_at_iso || email.sent_at || "",
+                        "Campaign": email.campaign_name || "N/A",
+                        "Campaign ID": email.campaign_id || null,
+                        "Error Message": email.error_message || ""
+                    }));
+                    
+                    // Update emails list with ALL campaign emails (no limit)
+                    // This will display all emails for the campaign, not just 10
+                    updateEmailsList(emails);
+                    
+                    // Update title to show total count
+                    const emailsTitle = document.getElementById('emailsTitle');
+                    if (emailsTitle) {
+                        emailsTitle.textContent = `Campaign Emails (${result.data.total})`;
+                    }
+                    
+                    // Apply status filter if active
+                    if (currentStatusFilter !== null) {
+                        applyFilters();
+                    }
+                } else {
+                    console.error('Failed to fetch campaign emails:', result.error || 'Unknown error');
+                    alert('Failed to load campaign emails: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error fetching campaign emails:', error);
+                alert('Error loading campaign emails: ' + error.message);
+            }
+            
+            // Update UI
+            const filteredCampaignName = document.getElementById('filteredCampaignName');
+            const campaignFilterBadge = document.getElementById('campaignFilterBadge');
+            if (filteredCampaignName && campaignFilterBadge) {
+                filteredCampaignName.textContent = campaignName;
+                campaignFilterBadge.classList.remove('hidden');
+            }
+        }
+        
+        async function filterEmailsByStatus(status) {
+            currentStatusFilter = status;
+            
+            // Fetch ALL emails with this status from API
+            try {
+                let apiUrl = '/api/emails-by-status/?status=' + status;
+                // Only add user_id if admin has selected a specific user (not viewing all data)
+                // Check if we're viewing a different user than the logged-in user
+                if (viewAllEnabled && selectedUserId && selectedUserId != currentUserId) {
+                    apiUrl += `&user_id=${selectedUserId}`;
+                    console.log('filterEmailsByStatus: Filtering by selected user:', selectedUserId);
+                } else if (viewAllEnabled) {
+                    console.log('filterEmailsByStatus: Showing all emails (admin, no user filter)');
+                } else {
+                    console.log('filterEmailsByStatus: Showing user\'s own emails');
+                }
+                
+                const response = await fetch(apiUrl);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    const emails = result.data.emails || [];
+                    // Update emails list with ALL emails of this status
+                    updateEmailsList(emails);
+                    
+                    // Update title to show total count
+                    const emailsTitle = document.getElementById('emailsTitle');
+                    if (emailsTitle) {
+                        emailsTitle.textContent = `${result.data.status.charAt(0).toUpperCase() + result.data.status.slice(1)} Emails (${result.data.total})`;
+                    }
+                    
+                    // Store emails data for export
+                    campaignEmailsData = emails.map(email => ({
+                        "First Name": email.first_name || "",
+                        "Email": email.recipient_email || "",
+                        "Subject": email.subject || "",
+                        "Status": email.status || "",
+                        "Sent At": email.sent_at_iso || email.sent_at || "",
+                        "Campaign": email.campaign_name || "N/A",
+                        "Campaign ID": email.campaign_id || null,
+                        "Error Message": email.error_message || ""
+                    }));
+                } else {
+                    console.error('Failed to fetch emails by status:', result.error);
+                    // Fallback to local filtering
+                    applyFilters();
+                }
+            } catch (error) {
+                console.error('Error fetching emails by status:', error);
+                // Fallback to local filtering
+                applyFilters();
+            }
+            
+            // Update UI
+            const filteredStatusName = document.getElementById('filteredStatusName');
+            const statusFilterBadge = document.getElementById('statusFilterBadge');
+            let statusLabel = 'Sent';
+            if (status === 'sent') {
+                statusLabel = 'Sent';
+            } else if (status === 'bounce') {
+                statusLabel = 'Bounce';
+            } else if (status === 'failed') {
+                statusLabel = 'Failed';
+            }
+            filteredStatusName.textContent = statusLabel;
+            statusFilterBadge.classList.remove('hidden');
+        }
+        
+        function applyFilters() {
+            const emailItems = document.querySelectorAll('.email-item');
+            const emailsTitle = document.getElementById('emailsTitle');
+            const container = document.getElementById('emailsContainer');
+            
+            let visibleCount = 0;
+            emailItems.forEach(item => {
+                let shouldShow = true;
+                
+                // Check campaign filter
+                if (currentCampaignFilter !== null) {
+                    const itemCampaignId = item.getAttribute('data-campaign-id');
+                    // Convert both to strings for comparison, handle empty/null values
+                    const itemId = itemCampaignId ? String(itemCampaignId).trim() : '';
+                    const filterId = String(currentCampaignFilter).trim();
+                    if (itemId === '' || itemId !== filterId) {
+                        shouldShow = false;
+                    }
+                }
+                
+                // Check status filter
+                if (shouldShow && currentStatusFilter !== null) {
+                    const itemStatus = item.getAttribute('data-email-status');
+                    if (itemStatus !== currentStatusFilter) {
+                        shouldShow = false;
+                    }
+                }
+                
+                if (shouldShow) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Update title
+            emailsTitle.textContent = visibleCount > 0 ? `Emails (${visibleCount})` : 'Recent Emails';
+            
+            // Show message if no emails
+            let noEmailsMsg = container.querySelector('.no-emails-msg');
+            if (visibleCount === 0) {
+                if (!noEmailsMsg) {
+                    noEmailsMsg = document.createElement('p');
+                    noEmailsMsg.className = 'text-gray-500 text-sm text-center py-4 no-emails-msg';
+                    let message = 'No emails found';
+                    if (currentCampaignFilter !== null && currentStatusFilter !== null) {
+                        message = 'No emails found matching the selected filters';
+                    } else if (currentCampaignFilter !== null) {
+                        message = 'No emails found for this campaign';
+                    } else if (currentStatusFilter !== null) {
+                        const statusLabel = currentStatusFilter === 'sent' ? 'sent' : 
+                                          currentStatusFilter === 'bounce' ? 'bounce' : 
+                                          currentStatusFilter === 'failed' ? 'failed' : currentStatusFilter;
+                        message = `No ${statusLabel} emails found`;
+                    }
+                    noEmailsMsg.textContent = message;
+                    container.appendChild(noEmailsMsg);
+                }
+            } else if (noEmailsMsg) {
+                noEmailsMsg.remove();
+            }
+        }
+        
+        function clearCampaignFilter() {
+            currentCampaignFilter = null;
+            campaignEmailsData = null; // Clear campaign emails data
+            const campaignFilterBadge = document.getElementById('campaignFilterBadge');
+            campaignFilterBadge.classList.add('hidden');
+            
+            // Reset title
+            const emailsTitle = document.getElementById('emailsTitle');
+            if (emailsTitle) {
+                emailsTitle.textContent = 'Recent Emails';
+            }
+            
+            // Reload recent emails from dashboard
+            refreshDashboardData();
+        }
+        
+        function clearStatusFilter() {
+            currentStatusFilter = null;
+            campaignEmailsData = null; // Clear status filter emails data
+            const statusFilterBadge = document.getElementById('statusFilterBadge');
+            statusFilterBadge.classList.add('hidden');
+            
+            // Reset title
+            const emailsTitle = document.getElementById('emailsTitle');
+            if (emailsTitle) {
+                emailsTitle.textContent = 'Recent Emails';
+            }
+            
+            // Reload recent emails from dashboard
+            refreshDashboardData();
+        }
+        
+        // Export Emails Function
+        function exportEmails(format) {
+            let emailsData = [];
+            
+            // If campaign filter is active, use campaign emails data (all emails for that campaign)
+            if (currentCampaignFilter !== null && campaignEmailsData) {
+                emailsData = [...campaignEmailsData]; // Copy the array
+            } else {
+                // Otherwise, use recent emails from dashboard
+                const emailsDataScript = document.getElementById('emails-data');
+                emailsData = emailsDataScript ? JSON.parse(emailsDataScript.textContent) : [];
+            }
+            
+            // Filter by status if filter is active
+            if (currentStatusFilter !== null) {
+                emailsData = emailsData.filter(item => {
+                    return item['Status'] === currentStatusFilter;
+                });
+            }
+            
+            if (emailsData.length === 0) {
+                alert('No emails to export');
+                return;
+            }
+            
+            // Export emails data (First Name is included, Last Name, Company Name, Title are excluded)
+            const filename = currentCampaignFilter !== null ? 'campaign_emails' : 'recent_emails';
+            exportData(emailsData, filename, format);
+        }
+        
+        function exportData(data, filename, format) {
+            if (format === 'csv') {
+                // Convert to CSV
+                if (data.length === 0) return;
+                
+                // Remove unwanted fields (Last Name, Company Name, Title) - keep First Name
+                const fieldsToRemove = ['Last Name', 'last_name', 'Last Name', 
+                                       'Company Name', 'company_name', 'Company Name', 
+                                       'Title', 'title', 'TITLE'];
+                const cleanedData = data.map(row => {
+                    const cleaned = { ...row };
+                    fieldsToRemove.forEach(field => {
+                        delete cleaned[field];
+                    });
+                    return cleaned;
+                });
+                
+                // Ensure First Name and Email exist and are first columns
+                const normalizedData = cleanedData.map(row => {
+                    const normalized = { ...row };
+                    // Ensure First Name exists - check multiple possible field names
+                    if (!normalized['First Name'] || normalized['First Name'] === '') {
+                        normalized['First Name'] = normalized['first_name'] || normalized['First Name'] || '';
+                    }
+                    // Ensure Email exists - check multiple possible field names
+                    if (!normalized['Email'] || normalized['Email'] === '') {
+                        normalized['Email'] = normalized['email'] || normalized['Email'] || normalized['recipient_email'] || '';
+                    }
+                    return normalized;
+                });
+                
+                // Ensure First Name and Email are first columns
+                const requiredFields = ['First Name', 'Email'];
+                const otherFields = Object.keys(normalizedData[0]).filter(key => !requiredFields.includes(key));
+                const headers = [...requiredFields, ...otherFields];
+                
+                const csvRows = [];
+                
+                // Add headers
+                csvRows.push(headers.join(','));
+                
+                // Add data rows
+                normalizedData.forEach(row => {
+                    const values = headers.map(header => {
+                        const value = row[header] || '';
+                        // Escape quotes and wrap in quotes if contains comma or quote
+                        return `"${String(value).replace(/"/g, '""')}"`;
+                    });
+                    csvRows.push(values.join(','));
+                });
+                
+                const csvContent = csvRows.join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${filename}_${new Date().toISOString().split('T')[0]}.csv`;
+                link.click();
+                URL.revokeObjectURL(url);
+            } else if (format === 'json') {
+                // Remove unwanted fields (Last Name, Company Name, Title) - keep First Name
+                const fieldsToRemove = ['Last Name', 'last_name', 'Last Name', 
+                                       'Company Name', 'company_name', 'Company Name', 
+                                       'Title', 'title', 'TITLE'];
+                const cleanedData = data.map(row => {
+                    const cleaned = { ...row };
+                    fieldsToRemove.forEach(field => {
+                        delete cleaned[field];
+                    });
+                    return cleaned;
+                });
+                
+                // Normalize data to ensure First Name and Email exist
+                const normalizedData = cleanedData.map(row => {
+                    const normalized = { ...row };
+                    // Ensure First Name exists - check multiple possible field names
+                    if (!normalized['First Name'] || normalized['First Name'] === '') {
+                        normalized['First Name'] = normalized['first_name'] || normalized['First Name'] || '';
+                    }
+                    // Ensure Email exists - check multiple possible field names
+                    if (!normalized['Email'] || normalized['Email'] === '') {
+                        normalized['Email'] = normalized['email'] || normalized['Email'] || normalized['recipient_email'] || '';
+                    }
+                    // Reorder to put First Name and Email first
+                    const ordered = {};
+                    ordered['First Name'] = normalized['First Name'] || '';
+                    ordered['Email'] = normalized['Email'] || '';
+                    Object.keys(normalized).forEach(key => {
+                        if (key !== 'First Name' && key !== 'Email') {
+                            ordered[key] = normalized[key];
+                        }
+                    });
+                    return ordered;
+                });
+                
+                // Convert to JSON
+                const jsonContent = JSON.stringify(normalizedData, null, 2);
+                const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${filename}_${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+        
+        // Automatic Dashboard Refresh (without disrupting frontend)
+        let autoRefreshInterval = null;
+        let isRefreshing = false;
+        
+        function updateDashboardData(data) {
+            // Update statistics
+            const totalEmailsEl = document.getElementById('stat-total-emails');
+            const campaignsSentEl = document.getElementById('stat-campaigns-sent');
+            const bounceEmailsCardEl = document.getElementById('stat-bounce-emails-card');
+            const activeCampaignsEl = document.getElementById('stat-active-campaigns');
+            const sentEmailsEl = document.getElementById('stat-sent-emails');
+            const failedEmailsEl = document.getElementById('stat-failed-emails');
+            const bounceEmailsEl = document.getElementById('stat-bounce-emails');
+            
+            console.log('updateDashboardData: Received data:', {
+                bounce_emails: data.bounce_emails,
+                total_emails: data.total_emails,
+                sent_emails: data.sent_emails,
+                failed_emails: data.failed_emails
+            });
+            
+            if (totalEmailsEl && data.total_emails !== undefined) {
+                totalEmailsEl.textContent = data.total_emails;
+            }
+            if (campaignsSentEl && data.campaigns_sent !== undefined) {
+                campaignsSentEl.textContent = data.campaigns_sent;
+            }
+            if (bounceEmailsCardEl && data.bounce_emails !== undefined && data.bounce_emails !== null) {
+                bounceEmailsCardEl.textContent = data.bounce_emails;
+                console.log('updateDashboardData: Updated stat-bounce-emails-card to:', data.bounce_emails);
+            } else {
+                console.log('updateDashboardData: bounceEmailsCardEl not found or data.bounce_emails is undefined/null');
+            }
+            if (activeCampaignsEl && data.active_campaigns !== undefined) {
+                activeCampaignsEl.textContent = data.active_campaigns;
+            }
+            if (sentEmailsEl && data.sent_emails !== undefined) {
+                sentEmailsEl.textContent = data.sent_emails;
+            }
+            if (failedEmailsEl && data.failed_emails !== undefined) {
+                failedEmailsEl.textContent = data.failed_emails;
+            }
+            if (bounceEmailsEl && data.bounce_emails !== undefined && data.bounce_emails !== null) {
+                bounceEmailsEl.textContent = data.bounce_emails;
+                console.log('updateDashboardData: Updated stat-bounce-emails to:', data.bounce_emails);
+            } else {
+                console.log('updateDashboardData: bounceEmailsEl not found or data.bounce_emails is undefined/null');
+            }
+            
+            // Update last login/logout
+            if (data.last_login) {
+                const lastLoginEl = document.getElementById('last-login-time');
+                if (lastLoginEl) {
+                    lastLoginEl.textContent = data.last_login.timestamp;
+                }
+            }
+            if (data.last_logout) {
+                const lastLogoutEl = document.getElementById('last-logout-time');
+                if (lastLogoutEl) {
+                    lastLogoutEl.textContent = data.last_logout.timestamp;
+                }
+            }
+            
+            // Update campaigns list (only if no filters are active and user is not interacting)
+            if (currentCampaignFilter === null) {
+                updateCampaignsList(data.recent_campaigns);
+            }
+            
+            // Only update emails list if no campaign filter is active
+            // (If campaign filter is active, we want to keep showing all campaign emails)
+            if (currentCampaignFilter === null) {
+                updateEmailsList(data.recent_emails);
+            } else {
+                // Re-apply filters if campaign filter is active (to maintain the campaign view)
+                applyFilters();
+            }
+            
+            // Re-apply status filter if active
+            if (currentStatusFilter !== null && currentCampaignFilter === null) {
+                applyFilters();
+            }
+        }
+        
+        // Update elapsed time for a specific campaign
+        function updateCampaignElapsedTime(campaignId, sentAtIso) {
+            if (!sentAtIso) {
+                console.log(`No start time for campaign ${campaignId}`);
+                return;
+            }
+            
+            const elapsedEl = document.getElementById(`elapsed-time-${campaignId}`);
+            if (!elapsedEl) {
+                console.log(`Elapsed element not found for campaign ${campaignId}`);
+                return;
+            }
+            
+            try {
+                const sentAt = new Date(sentAtIso);
+                const now = new Date();
+                const elapsed = Math.floor((now - sentAt) / 1000); // seconds
+                
+                if (elapsed < 0) {
+                    console.log(`Negative elapsed time for campaign ${campaignId}`);
+                    elapsedEl.textContent = '0s';
+                    return;
+                }
+                
+                const hours = Math.floor(elapsed / 3600);
+                const minutes = Math.floor((elapsed % 3600) / 60);
+                const seconds = elapsed % 60;
+                
+                let elapsedStr = '';
+                if (hours > 0) {
+                    elapsedStr = `${hours}h ${minutes}m ${seconds}s`;
+                } else if (minutes > 0) {
+                    elapsedStr = `${minutes}m ${seconds}s`;
+                } else {
+                    elapsedStr = `${seconds}s`;
+                }
+                
+                elapsedEl.textContent = elapsedStr;
+            } catch (error) {
+                console.error(`Error updating elapsed time for campaign ${campaignId}:`, error);
+            }
+        }
+        
+        function updateCampaignsList(campaigns) {
+            const container = document.getElementById('campaignsContainer');
+            if (!container) return;
+            
+            // Store current scroll position
+            const scrollTop = container.scrollTop;
+            
+            // Clear and rebuild campaigns list
+            container.innerHTML = '';
+            
+            if (campaigns.length === 0) {
+                const noCampaignsMsg = document.createElement('p');
+                noCampaignsMsg.className = 'text-gray-500 text-sm text-center py-4';
+                noCampaignsMsg.textContent = 'No campaigns yet';
+                container.appendChild(noCampaignsMsg);
+            } else {
+                campaigns.forEach(campaign => {
+                    const campaignItem = document.createElement('div');
+                    campaignItem.className = 'campaign-item inner-card rounded-xl p-4 transition-all hover:bg-white/80 relative group';
+                    campaignItem.setAttribute('data-campaign-id', campaign.id);
+                    campaignItem.setAttribute('data-campaign-name', campaign.name);
+                    
+                    const statusClass = campaign.status === 'completed' 
+                        ? 'bg-green-100 text-green-800 border border-green-300'
+                        : campaign.status === 'sending'
+                        ? 'bg-blue-100 text-blue-800 border border-blue-300'
+                        : campaign.status === 'failed'
+                        ? 'bg-red-100 text-red-800 border border-red-300'
+                        : 'bg-gray-100 text-gray-800 border border-gray-300';
+                    
+                    // Build timing info HTML - Always show for sending or completed campaigns
+                    let timingHtml = '';
+                    let timingDisplay = 'none';
+                    if (campaign.status === 'sending') {
+                        timingDisplay = 'block';
+                        const elapsedText = campaign.elapsed || 'Calculating...';
+                        timingHtml = `<div class="mt-1 space-y-0.5" id="campaign-timing-${campaign.id}" style="display: block;">
+                                <p class="text-gray-500 text-xs">
+                                    <span class="font-semibold">Running:</span> <span id="elapsed-time-${campaign.id}">${elapsedText}</span>
+                                </p>
+                            </div>`;
+                    } else if (campaign.completed_at) {
+                        timingDisplay = 'block';
+                        const durationText = campaign.duration ? `<p class="text-gray-500 text-xs">
+                                    <span class="font-semibold">Duration:</span> ${campaign.duration}
+                                </p>` : '';
+                        timingHtml = `<div class="mt-1 space-y-0.5" id="campaign-timing-${campaign.id}" style="display: block;">
+                                <p class="text-gray-500 text-xs">
+                                    <span class="font-semibold">Completed:</span> ${campaign.completed_at}
+                                </p>
+                                ${durationText}
+                            </div>`;
+                    } else {
+                        timingHtml = `<div class="mt-1 space-y-0.5" id="campaign-timing-${campaign.id}" style="display: none;"></div>`;
+                    }
+                    
+                    // Store start time for real-time updates
+                    if (campaign.status === 'sending' && campaign.start_time_iso) {
+                        campaignItem.setAttribute('data-start-time', campaign.start_time_iso);
+                    }
+                    
+                    campaignItem.innerHTML = `
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1 cursor-pointer campaign-clickable">
+                                <p class="text-gray-900 font-bold mb-1">${campaign.name}</p>
+                                <p class="text-gray-600 text-sm mb-2">${campaign.subject}</p>
+                                <div class="flex items-center space-x-2 flex-wrap gap-1">
+                                    <p class="text-gray-500 text-xs">${campaign.created_at}</p>
+                                    <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${statusClass}">
+                                        ${campaign.status}
+                                    </span>
+                                </div>
+                                <!-- Campaign Progress Bar -->
+                                <div class="campaign-progress-container" id="campaign-progress-${campaign.id}">
+                                    <div class="campaign-progress-bar">
+                                        <div class="campaign-progress-fill" id="campaign-progress-fill-${campaign.id}"></div>
+                                    </div>
+                                    <div class="campaign-progress-text" id="campaign-progress-text-${campaign.id}">0%</div>
+                                </div>
+                                ${timingHtml}
+                            </div>
+                            <div class="flex items-center space-x-2 ml-3">
+                                <button type="button" class="campaign-restart-btn p-2 hover:bg-green-100 rounded-lg transition-all group/restart" title="Restart Campaign" data-campaign-id="${campaign.id}">
+                                    <svg class="w-5 h-5 text-green-600 group-hover/restart:text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="campaign-pause-btn p-2 hover:bg-yellow-100 rounded-lg transition-all group/pause" title="Pause Campaign" data-campaign-id="${campaign.id}">
+                                    <svg class="w-5 h-5 text-yellow-600 group-hover/pause:text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="campaign-delete-btn p-2 hover:bg-red-100 rounded-lg transition-all group/delete" title="Delete Campaign" data-campaign-id="${campaign.id}" data-campaign-name="${campaign.name.replace(/"/g, '&quot;')}">
+                                    <svg class="w-5 h-5 text-red-600 group-hover/delete:text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(campaignItem);
+                    
+                    // If campaign is sending, start updating elapsed time
+                    if (campaign.status === 'sending') {
+                        const startTimeIso = campaign.start_time_iso || campaign.sent_at_iso || campaign.created_at_iso;
+                        if (startTimeIso) {
+                            // Update immediately
+                            updateCampaignElapsedTime(campaign.id, startTimeIso);
+                            // Update every second
+                            setInterval(() => {
+                                updateCampaignElapsedTime(campaign.id, startTimeIso);
+                            }, 1000);
+                        }
+                    }
+                });
+                
+                // Event listeners are handled via event delegation, no need to reattach
+            }
+            
+            // Restore scroll position
+            container.scrollTop = scrollTop;
+        }
+        
+        function updateEmailsList(emails) {
+            const container = document.getElementById('emailsContainer');
+            if (!container) return;
+            
+            // Store current scroll position
+            const scrollTop = container.scrollTop;
+            
+            // Clear and rebuild emails list
+            container.innerHTML = '';
+            
+            if (emails.length === 0) {
+                const noEmailsMsg = document.createElement('p');
+                noEmailsMsg.className = 'text-gray-500 text-sm text-center py-4';
+                noEmailsMsg.textContent = 'No emails sent yet';
+                container.appendChild(noEmailsMsg);
+            } else {
+                emails.forEach(email => {
+                    const emailItem = document.createElement('div');
+                    emailItem.className = 'inner-card rounded-xl p-4 transition-all email-item';
+                    // Ensure campaign_id is set as string, even if null
+                    const campaignId = email.campaign_id ? String(email.campaign_id) : '';
+                    emailItem.setAttribute('data-email-id', email.id || '');
+                    emailItem.setAttribute('data-campaign-id', campaignId);
+                    emailItem.setAttribute('data-campaign-name', email.campaign_name || 'N/A');
+                    emailItem.setAttribute('data-email-status', email.status);
+                    
+                    const statusClass = email.status === 'sent' 
+                        ? 'bg-green-100 text-green-800 border border-green-300'
+                        : email.status === 'bounce'
+                        ? 'bg-violet-100 text-violet-800 border border-violet-300'
+                        : 'bg-red-100 text-red-800 border border-red-300';
+                    
+                    // Show first name if available, otherwise just email
+                    const displayName = email.first_name 
+                        ? `${email.first_name} (${email.recipient_email})`
+                        : email.recipient_email;
+                    
+                    emailItem.innerHTML = `
+                        <p class="text-gray-900 font-bold text-sm mb-1">${displayName}</p>
+                        <p class="text-gray-600 text-xs truncate mb-2">${email.subject || ''}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-500 text-xs">${email.sent_at || ''}</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusClass}">
+                                ${email.status}
+                            </span>
+                        </div>
+                    `;
+                    // Add click handler for email details
+                    emailItem.addEventListener('click', function(e) {
+                        // Don't trigger if clicking on status badge or other interactive elements
+                        if (!e.target.closest('.px-3')) {
+                            showEmailDetails(email.id);
+                        }
+                    });
+                    emailItem.classList.add('cursor-pointer', 'hover:bg-white/90');
+                    container.appendChild(emailItem);
+                });
+            }
+            
+            // Restore scroll position
+            container.scrollTop = scrollTop;
+            
+            // Update emails data for export
+            updateEmailsDataForExport(emails);
+        }
+        
+        function updateEmailsDataForExport(emails) {
+            const emailsDataScript = document.getElementById('emails-data');
+            if (emailsDataScript) {
+                const emailsData = emails.map(email => ({
+                    "First Name": email.first_name || "",
+                    "Email": email.recipient_email || "",
+                    "Subject": email.subject || "",
+                    "Status": email.status || "",
+                    "Sent At": email.sent_at_iso || email.sent_at || "",
+                    "Campaign": email.campaign_name || "N/A",
+                    "Campaign ID": email.campaign_id || null,
+                    "Error Message": email.error_message || ""
+                }));
+                emailsDataScript.textContent = JSON.stringify(emailsData);
+            }
+        }
+        
+        function attachCampaignEventListeners() {
+            // Event listeners are now handled via event delegation in DOMContentLoaded
+            // No need to reattach since they're on the container, not individual elements
+        }
+        
+        async function refreshDashboardData() {
+            // Don't block if already refreshing - allow forced refreshes
+            if (isRefreshing) {
+                console.log('refreshDashboardData: Already refreshing, skipping...');
+                return;
+            }
+            
+            try {
+                isRefreshing = true;
+                // Include user_id parameter if admin has selected a specific user (not viewing all data)
+                let apiUrl = '{% url "dashboard_api" %}';
+                // Only send user_id if admin is viewing a different user than themselves
+                if (viewAllEnabled && selectedUserId && selectedUserId != currentUserId) {
+                    apiUrl += `?user_id=${selectedUserId}`;
+                    console.log('refreshDashboardData: Refreshing for selected user:', selectedUserId);
+                } else {
+                    console.log('refreshDashboardData: Refreshing for current user (viewAllEnabled:', viewAllEnabled, ')');
+                }
+                const response = await fetch(apiUrl);
+                const result = await response.json();
+                
+                console.log('refreshDashboardData: API response:', {
+                    success: result.success,
+                    hasData: !!result.data,
+                    bounce_emails: result.data?.bounce_emails,
+                    fullData: result.data
+                });
+                
+                if (result.success && result.data) {
+                    updateDashboardData(result.data);
+                    console.log('refreshDashboardData: Updated bounce count to:', result.data.bounce_emails);
+                } else {
+                    console.error('refreshDashboardData: API call failed or no data:', result);
+                }
+            } catch (error) {
+                console.error('Error refreshing dashboard:', error);
+            } finally {
+                isRefreshing = false;
+            }
+        }
+        
+        // Update elapsed time for running campaigns
+        function updateElapsedTimes() {
+            document.querySelectorAll('[id^="elapsed-time-"]').forEach(el => {
+                const campaignId = el.id.replace('elapsed-time-', '');
+                const campaignItem = document.querySelector(`.campaign-item[data-campaign-id="${campaignId}"]`);
+                if (campaignItem) {
+                    const statusBadge = campaignItem.querySelector('span[class*="rounded-full"]');
+                    if (statusBadge && statusBadge.textContent.trim() === 'sending') {
+                        // Get start time from data attribute
+                        const startTimeIso = campaignItem.getAttribute('data-start-time');
+                        if (startTimeIso) {
+                            updateCampaignElapsedTime(campaignId, startTimeIso);
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initialize elapsed time for existing sending campaigns on page load
+        function initializeElapsedTimes() {
+            document.querySelectorAll('.campaign-item').forEach(campaignItem => {
+                const campaignId = campaignItem.getAttribute('data-campaign-id');
+                const statusBadge = campaignItem.querySelector('span[class*="rounded-full"]');
+                const timingDiv = document.getElementById(`campaign-timing-${campaignId}`);
+                const elapsedEl = document.getElementById(`elapsed-time-${campaignId}`);
+                
+                if (statusBadge && statusBadge.textContent.trim() === 'sending') {
+                    // Ensure timing div is visible
+                    if (timingDiv) {
+                        timingDiv.style.display = 'block';
+                        // If elapsed element doesn't exist, create it
+                        if (!elapsedEl) {
+                            timingDiv.innerHTML = `<p class="text-gray-500 text-xs">
+                                <span class="font-semibold">Running:</span> <span id="elapsed-time-${campaignId}">Calculating...</span>
+                            </p>`;
+                        }
+                    }
+                    
+                    // Try to get start time from data attribute
+                    let startTimeIso = campaignItem.getAttribute('data-start-time');
+                    if (startTimeIso) {
+                        updateCampaignElapsedTime(campaignId, startTimeIso);
+                    }
+                }
+            });
+        }
+        
+        // Start automatic refresh every 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize elapsed times for existing campaigns
+            initializeElapsedTimes();
+            
+            // Initial delay to let page load
+            setTimeout(() => {
+                // Refresh every 5 seconds
+                autoRefreshInterval = setInterval(refreshDashboardData, 5000);
+                // Update elapsed times every second for running campaigns
+                setInterval(updateElapsedTimes, 1000);
+                // Update circular progress bar with all sending campaigns every 3 seconds
+                setInterval(updateCircularProgressBarWithAllCampaigns, 3000);
+                // Initial update
+                updateCircularProgressBarWithAllCampaigns();
+            }, 2000);
+        });
+        
+        // Stop refresh when page is hidden (to save resources)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
+            } else {
+                if (!autoRefreshInterval) {
+                    autoRefreshInterval = setInterval(refreshDashboardData, 5000);
+                }
+            }
+        });
+        
+        // Email Details Popup Functions
+        async function showEmailDetails(emailId) {
+            const modal = document.getElementById('emailDetailsModal');
+            const content = document.getElementById('emailDetailsContent');
+            
+            // Show modal with loading state
+            modal.classList.remove('hidden');
+            content.innerHTML = `
+                <div class="flex items-center justify-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch(`/api/email/${emailId}/details/`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    const email = result.data;
+                    const sentDate = email.sent_at ? new Date(email.sent_at).toLocaleString() : 'N/A';
+                    
+                    // Format email body
+                    let bodyContent = '';
+                    if (email.is_html) {
+                        bodyContent = `<div class="prose max-w-none">${email.body || 'No content'}</div>`;
+                    } else {
+                        bodyContent = `<pre class="whitespace-pre-wrap text-sm text-gray-700 bg-gray-50 p-4 rounded-lg">${email.body || 'No content'}</pre>`;
+                    }
+                    
+                    content.innerHTML = `
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Email Details</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-600 mb-1">To:</p>
+                                <p class="text-gray-900">${email.recipient_email || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-600 mb-1">Subject:</p>
+                                <p class="text-gray-900">${email.subject || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-600 mb-1">Campaign:</p>
+                                <p class="text-gray-900">${email.campaign_name || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-600 mb-1">Status:</p>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${email.status === 'sent' ? 'bg-green-100 text-green-800 border border-green-300' : email.status === 'bounce' ? 'bg-violet-100 text-violet-800 border border-violet-300' : 'bg-red-100 text-red-800 border border-red-300'}">
+                                    ${email.status || 'N/A'}
+                                </span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-600 mb-1">Sent At:</p>
+                                <p class="text-gray-900">${sentDate}</p>
+                            </div>
+                            ${email.error_message ? `
+                            <div>
+                                <p class="text-sm font-semibold text-gray-600 mb-1">Error Message:</p>
+                                <p class="text-red-600 text-sm">${email.error_message}</p>
+                            </div>
+                            ` : ''}
+                            <div class="border-t pt-4 mt-4">
+                                <p class="text-sm font-semibold text-gray-600 mb-2">Email Body:</p>
+                                <div class="bg-white rounded-lg p-4 border border-gray-200 max-h-96 overflow-y-auto">
+                                    ${bodyContent}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = `
+                        <div class="text-center py-8">
+                            <p class="text-red-600">Error: ${result.error || 'Failed to load email details'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-red-600">Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function closeEmailDetailsModal() {
+            const modal = document.getElementById('emailDetailsModal');
+            modal.classList.add('hidden');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('emailDetailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmailDetailsModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEmailDetailsModal();
+            }
+        });
+        
+        // Helper function to render bounce email item
+        function renderBounceEmailItem(email) {
+            const emailItem = document.createElement('div');
+            emailItem.className = 'p-3 inner-card rounded-xl transition-all';
+            
+            // Only make clickable if it has an ID (matched to EmailLog)
+            if (email.id) {
+                emailItem.classList.add('cursor-pointer', 'hover:bg-white/90');
+                emailItem.setAttribute('data-email-id', email.id);
+                emailItem.onclick = () => showEmailDetails(email.id);
+            } else {
+                // Unmatched bounce - show but not clickable
+                emailItem.classList.add('opacity-75');
+            }
+            
+            const unmatchedBadge = email.is_unmatched ? '<span class="px-2 py-0.5 bg-gray-200 text-gray-700 text-xs rounded ml-2">Not in EmailLog</span>' : '';
+            
+            emailItem.innerHTML = `
+                <p class="text-gray-900 font-bold text-sm mb-1">
+                    ${email.recipient_email}${unmatchedBadge}
+                </p>
+                <p class="text-gray-600 text-xs truncate mb-2">${email.subject || 'Bounce notification'}</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-500 text-xs">${email.sent_at || 'N/A'}</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-800 border border-violet-300">
+                        ${email.status}
+                    </span>
+                </div>
+                ${email.error_message ? `<p class="text-red-600 text-xs mt-1 truncate">${email.error_message}</p>` : ''}
+            `;
+            return emailItem;
+        }
+        
+        // Load existing bounces on page load
+        async function loadExistingBounces() {
+            const results = document.getElementById('bounceResults');
+            const bounceStats = document.getElementById('bounceStats');
+            const bounceEmailsList = document.getElementById('bounceEmailsList');
+            
+            try {
+                // Include user_id parameter if admin has selected a specific user
+                let apiUrl = '{% url "get_bounces_api" %}';
+                // Only send user_id if admin is viewing a different user than themselves
+                // If admin is viewing all data (selectedUserId == currentUserId), don't send user_id
+                if (viewAllEnabled && selectedUserId && selectedUserId != currentUserId) {
+                    apiUrl += `?user_id=${selectedUserId}`;
+                    console.log('loadExistingBounces: Loading for selected user:', selectedUserId);
+                } else if (viewAllEnabled) {
+                    // Admin viewing all data - don't send user_id to get all bounces
+                    console.log('loadExistingBounces: Admin viewing ALL bounces (no user filter)');
+                } else {
+                    // Non-admin viewing own data - don't send user_id, backend will filter by request.user
+                    console.log('loadExistingBounces: Non-admin loading own bounces');
+                }
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                console.log('loadExistingBounces: Response:', {
+                    success: data.success,
+                    total: data.data?.total,
+                    bounce_emails_count: data.data?.bounce_emails?.length
+                });
+                
+                if (data.success && data.data && data.data.bounce_emails && data.data.bounce_emails.length > 0) {
+                    // Show results section
+                    results.classList.remove('hidden');
+                    
+                    // Update stats
+                    bounceStats.textContent = `Total bounce emails: ${data.data.total || data.data.bounce_emails.length}`;
+                    
+                    // Display bounce emails
+                    bounceEmailsList.innerHTML = '';
+                    data.data.bounce_emails.forEach(email => {
+                        bounceEmailsList.appendChild(renderBounceEmailItem(email));
+                    });
+                    console.log('loadExistingBounces: Loaded', data.data.bounce_emails.length, 'bounce emails');
+                } else {
+                    console.log('loadExistingBounces: No bounce emails found or error in response');
+                }
+            } catch (error) {
+                console.error('Error loading existing bounces:', error);
+            }
+        }
+        
+        // Bounce Detector Functions
+        async function checkBounces() {
+            const btn = document.getElementById('bounceDetectorBtn');
+            const loading = document.getElementById('bounceLoading');
+            const results = document.getElementById('bounceResults');
+            const bounceStats = document.getElementById('bounceStats');
+            const bounceEmailsList = document.getElementById('bounceEmailsList');
+            
+            // Show loading, keep results visible
+            btn.disabled = true;
+            loading.classList.remove('hidden');
+            
+            try {
+                // Build request body with user_id if admin has selected a specific user
+                let requestBody = 'mailbox=INBOX&limit=200';
+                // Only send user_id if admin is viewing a different user than themselves
+                // If admin is viewing all data (selectedUserId == currentUserId), don't send user_id
+                if (viewAllEnabled && selectedUserId && selectedUserId != currentUserId) {
+                    requestBody += `&user_id=${selectedUserId}`;
+                    console.log('checkBounces: Checking bounces for selected user:', selectedUserId);
+                } else if (viewAllEnabled) {
+                    // Admin viewing all data - don't send user_id to check all bounces
+                    console.log('checkBounces: Admin checking ALL bounces (no user filter)');
+                } else {
+                    // Non-admin checking own bounces - don't send user_id, backend will filter by request.user
+                    console.log('checkBounces: Non-admin checking own bounces');
+                }
+                
+                const response = await fetch('{% url "check_bounces_api" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: requestBody
+                });
+                
+                const data = await response.json();
+                
+                // Hide loading
+                loading.classList.add('hidden');
+                btn.disabled = false;
+                
+                if (data.success) {
+                    // Show results (keep visible)
+                    results.classList.remove('hidden');
+                    
+                    // Update stats - show NEW bounces found
+                    const stats = data.data;
+                    const totalDisplayed = stats.bounce_emails ? stats.bounce_emails.length : 0;
+                    const newBouncesText = stats.total_bounces > 0 ? ` | New: ${stats.total_bounces}` : '';
+                    bounceStats.textContent = `Total: ${totalDisplayed}${newBouncesText} | Updated: ${stats.updated || 0} | Not Found: ${stats.not_found || 0}`;
+                    
+                    // Display ALL bounce emails (existing + new)
+                    bounceEmailsList.innerHTML = '';
+                    
+                    if (stats.bounce_emails && stats.bounce_emails.length > 0) {
+                        stats.bounce_emails.forEach(email => {
+                            bounceEmailsList.appendChild(renderBounceEmailItem(email));
+                        });
+                    } else {
+                        bounceEmailsList.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">No bounce emails found</p>';
+                    }
+                    
+                    // Force refresh dashboard stats immediately after checking bounces
+                    console.log('checkBounces: Refreshing dashboard after bounce check');
+                    // Force refresh by resetting isRefreshing flag
+                    isRefreshing = false;
+                    // Use setTimeout to ensure bounce updates are saved before refreshing
+                    setTimeout(() => {
+                        refreshDashboardData();
+                    }, 1000);
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to check bounces'));
+                }
+            } catch (error) {
+                loading.classList.add('hidden');
+                btn.disabled = false;
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        // Load existing bounces on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadExistingBounces();
+            // Load overall statistics on page load
+            loadOverallStatistics();
+        });
+        
+        // Campaign Statistics Graph Functions
+        let currentGraphCampaignId = null;
+        
+        async function loadOverallStatistics() {
+            try {
+                const response = await fetch('/api/campaign/statistics/');
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderGraph(data.data);
+                    currentGraphCampaignId = null;
+                    document.getElementById('toggleOverallBtn').classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading overall statistics:', error);
+            }
+        }
+        
+        async function toggleCampaignGraph(campaignId, campaignName) {
+            // If clicking the same campaign, toggle to overall
+            if (currentGraphCampaignId === campaignId) {
+                await loadOverallStatistics();
+                document.getElementById('graphTitle').textContent = 'Campaign Statistics Graph';
+                return;
+            }
+            
+            // Otherwise, load campaign-specific statistics
+            currentGraphCampaignId = campaignId;
+            
+            try {
+                const response = await fetch(`/api/campaign/${campaignId}/statistics/`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderGraph(data.data);
+                    document.getElementById('graphTitle').textContent = `${campaignName} Statistics`;
+                    document.getElementById('toggleOverallBtn').classList.remove('hidden');
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to load campaign statistics'));
+                }
+            } catch (error) {
+                console.error('Error loading campaign statistics:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function toggleOverallStatistics() {
+            await loadOverallStatistics();
+            document.getElementById('graphTitle').textContent = 'Campaign Statistics Graph';
+            currentGraphCampaignId = null;
+        }
+        
+        function renderGraph(data) {
+            const container = document.getElementById('graphContainer');
+            // Ensure all values are numbers and handle undefined/null
+            const sent = Number(data.sent) || 0;
+            const failed = Number(data.failed) || 0;
+            const bounce = Number(data.bounce) || 0;
+            const total = sent + failed + bounce;
+            const maxValue = Math.max(sent, failed, bounce, total, 1);
+            const height = 100; // SVG height in pixels - matches Email Status card content height
+            const width = 300;
+            const leftPadding = 40; // Space for Y-axis labels
+            const rightPadding = 15;
+            const topPadding = 5;
+            const bottomPadding = 25; // Space for X-axis labels
+            const graphWidth = width - leftPadding - rightPadding;
+            const graphHeight = height - topPadding - bottomPadding;
+            
+            // Calculate Y positions (inverted because SVG Y increases downward)
+            const getY = (value) => {
+                if (maxValue === 0) return height - bottomPadding;
+                return topPadding + graphHeight - ((value / maxValue) * graphHeight);
+            };
+            
+            const sentY = getY(sent);
+            const bounceY = getY(bounce);
+            const failedY = getY(failed);
+            
+            // Generate wave paths (sine wave pattern)
+            const generateWavePath = (y) => {
+                const points = [];
+                const steps = 100;
+                const amplitude = 3; // Wave amplitude
+                const frequency = 2; // Number of waves
+                
+                for (let i = 0; i <= steps; i++) {
+                    const x = leftPadding + (i / steps) * graphWidth;
+                    // Create sine wave pattern
+                    const waveOffset = Math.sin((i / steps) * Math.PI * frequency) * amplitude;
+                    points.push(`${x},${y + waveOffset}`);
+                }
+                return points.join(' L ');
+            };
+            
+            const sentPath = generateWavePath(sentY);
+            const bouncePath = generateWavePath(bounceY);
+            const failedPath = generateWavePath(failedY);
+            
+            // Generate Y-axis labels (0 to maxValue, rounded to nice numbers)
+            const yAxisLabels = [];
+            const numLabels = 5;
+            const roundedMax = Math.ceil(maxValue / 100) * 100 || Math.ceil(maxValue / 10) * 10 || maxValue;
+            for (let i = 0; i <= numLabels; i++) {
+                const value = Math.round((roundedMax / numLabels) * (numLabels - i));
+                const y = topPadding + (i * (graphHeight / numLabels));
+                yAxisLabels.push(`<text x="${leftPadding - 8}" y="${y + 4}" text-anchor="end" font-size="10" fill="#374151" font-family="sans-serif">${value}</text>`);
+            }
+            
+            // Calculate center X position for markers
+            const centerX = leftPadding + (graphWidth / 2);
+            
+            container.innerHTML = `
+                <div class="relative" style="height: ${height}px;">
+                    <svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" class="absolute inset-0">
+                        <!-- Grid lines (horizontal) -->
+                        ${Array.from({ length: 6 }).map((_, i) => {
+                            const y = topPadding + (i * (graphHeight / 5));
+                            return `<line x1="${leftPadding}" y1="${y}" x2="${width - rightPadding}" y2="${y}" stroke="#e5e7eb" stroke-width="1" />`;
+                        }).join('')}
+                        
+                        <!-- Y-axis line -->
+                        <line x1="${leftPadding}" y1="${topPadding}" x2="${leftPadding}" y2="${height - bottomPadding}" stroke="#374151" stroke-width="1.5" />
+                        <!-- X-axis line -->
+                        <line x1="${leftPadding}" y1="${height - bottomPadding}" x2="${width - rightPadding}" y2="${height - bottomPadding}" stroke="#374151" stroke-width="1.5" />
+                        
+                        <!-- Y-axis labels -->
+                        ${yAxisLabels.join('')}
+                        
+                        <!-- Sent Wave (Blue) -->
+                        <path d="M ${sentPath}" stroke="#3b82f6" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="${centerX}" cy="${sentY}" r="5" fill="#3b82f6" stroke="#ffffff" stroke-width="2" />
+                        
+                        <!-- Bounce Wave (Black) -->
+                        <path d="M ${bouncePath}" stroke="#000000" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="${centerX}" cy="${bounceY}" r="5" fill="#000000" stroke="#ffffff" stroke-width="2" />
+                        
+                        <!-- Failed Wave (Red) -->
+                        <path d="M ${failedPath}" stroke="#ef4444" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="${centerX}" cy="${failedY}" r="5" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="mt-2 flex items-center justify-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                        <span class="text-gray-700 text-xs font-semibold">Sent: <span class="font-bold text-sm">${sent}</span></span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-black rounded-full"></div>
+                        <span class="text-gray-700 text-xs font-semibold">Bounce: <span class="font-bold text-sm">${bounce}</span></span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <span class="text-gray-700 text-xs font-semibold">Failed: <span class="font-bold text-sm">${failed}</span></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Connect and redirect functions
+        function connectAndGoToGmail() {
+            // Store that we want to open Gmail modal on send email page
+            sessionStorage.setItem('openGmailModal', 'true');
+            // Redirect to send email page
+            window.location.href = '{% url "send_email_page" %}';
+        }
+
+        function connectAndGoToSpaceMail() {
+            // Store that we want to open SpaceMail modal on send email page
+            sessionStorage.setItem('openSpaceMailModal', 'true');
+            // Redirect to send email page
+            window.location.href = '{% url "send_email_page" %}';
+        }
+
+        // User Dropdown Functions
+        let usersLoaded = false;
+
+        async function loadUsers() {
+            if (usersLoaded) return;
+            
+            try {
+                const response = await fetch('{% url "get_users_api" %}');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const usersList = document.getElementById('usersList');
+                    usersList.innerHTML = '';
+                    
+                    data.users.forEach(user => {
+                        const userItem = document.createElement('div');
+                        const isCurrent = user.is_current;
+                        const isAdmin = user.is_staff || user.is_superuser;
+                        userItem.className = 'px-3 py-2 rounded-lg cursor-pointer transition-colors ' + 
+                            (isCurrent ? 'bg-purple-100 text-purple-700 font-semibold' : 'hover:bg-white/80 text-gray-700');
+                        
+                        let badges = '';
+                        if (isCurrent) {
+                            badges += '<span class="text-xs text-purple-600">(You)</span>';
+                        }
+                        if (isAdmin) {
+                            badges += '<span class="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full border border-yellow-300">Admin</span>';
+                        }
+                        
+                        const innerHTML = '<div class="flex items-center justify-between">' +
+                            '<span>' + user.username + '</span>' +
+                            '<div class="flex items-center">' + badges + '</div>' +
+                            '</div>';
+                        userItem.innerHTML = innerHTML;
+                        userItem.onclick = function() { selectUser(user.id, user.username); };
+                        usersList.appendChild(userItem);
+                    });
+                    
+                    usersLoaded = true;
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown.classList.contains('hidden')) {
+                loadUsers();
+                dropdown.classList.remove('hidden');
+                // Close dropdown when clicking outside
+                setTimeout(() => {
+                    document.addEventListener('click', closeUserDropdownOnOutsideClick);
+                }, 100);
+            } else {
+                dropdown.classList.add('hidden');
+                document.removeEventListener('click', closeUserDropdownOnOutsideClick);
+            }
+        }
+
+        function closeUserDropdownOnOutsideClick(event) {
+            const container = document.getElementById('userDropdownContainer');
+            if (!container.contains(event.target)) {
+                document.getElementById('userDropdown').classList.add('hidden');
+                document.removeEventListener('click', closeUserDropdownOnOutsideClick);
+            }
+        }
+
+        function selectUser(userId, username) {
+            selectedUserId = userId;
+            document.getElementById('selectedUserName').textContent = username;
+            document.getElementById('userDropdown').classList.add('hidden');
+            
+            // Reload dashboard with selected user
+            const url = new URL(window.location.href);
+            url.searchParams.set('user_id', userId);
+            window.location.href = url.toString();
+        }
+
+        // Load users on page load if user dropdown is visible
+        if (viewAllEnabled) {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Users will be loaded when dropdown is opened
+            });
+        }
+    </script>
+    </div>
+    <!-- End Content Wrapper -->
+</body>
+</html>

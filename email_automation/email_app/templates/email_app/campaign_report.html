@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Report - SpaceMail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #c5c7c9;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            padding-top: 140px;
+        }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding-top: 200px;
+            }
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        .btn-nav {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #667eea;
+            font-weight: 600;
+        }
+        .btn-nav:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border-color: rgba(102, 126, 234, 0.6);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-logout {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <!-- Navigation -->
+    <nav class="glass rounded-2xl p-4 md:p-6 mb-6 flex flex-col md:flex-row items-center gap-4 fixed top-0 left-4 right-4 z-50 mx-auto" style="max-width: calc(100% - 2rem);">
+        <div class="flex items-center space-x-4 md:absolute md:left-4">
+            <div class="p-3 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-xl shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-900">Campaign Report</h1>
+        </div>
+        <div class="flex items-center space-x-2 md:space-x-3 md:absolute md:right-4">
+            <a href="{% url 'dashboard' %}" class="btn-nav px-4 py-2 rounded-xl">
+                <span>Dashboard</span>
+            </a>
+            <span class="text-gray-700 font-medium hidden md:inline">Welcome, {{ user.username }}</span>
+            <a href="{% url 'logout' %}" class="btn-logout text-white font-semibold px-4 py-2 rounded-xl shadow-lg">
+                Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+            <div class="glass-card rounded-2xl p-6">
+                <p class="text-gray-600 text-sm mb-1 font-medium">Total Campaigns</p>
+                <p class="text-4xl font-extrabold text-gray-900">{{ total_campaigns }}</p>
+            </div>
+            <div class="glass-card rounded-2xl p-6">
+                <p class="text-gray-600 text-sm mb-1 font-medium">Completed</p>
+                <p class="text-4xl font-extrabold text-green-600">{{ completed_campaigns }}</p>
+            </div>
+            <div class="glass-card rounded-2xl p-6">
+                <p class="text-gray-600 text-sm mb-1 font-medium">Sending</p>
+                <p class="text-4xl font-extrabold text-blue-600">{{ sending_campaigns }}</p>
+            </div>
+            <div class="glass-card rounded-2xl p-6">
+                <p class="text-gray-600 text-sm mb-1 font-medium">Draft</p>
+                <p class="text-4xl font-extrabold text-gray-600">{{ draft_campaigns }}</p>
+            </div>
+            <div class="glass-card rounded-2xl p-6">
+                <p class="text-gray-600 text-sm mb-1 font-medium">Failed</p>
+                <p class="text-4xl font-extrabold text-red-600">{{ failed_campaigns }}</p>
+            </div>
+        </div>
+
+        <!-- Filters and Send Report -->
+        <div class="glass-card rounded-2xl p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-gray-900 font-bold text-lg">Filters</h3>
+                <button onclick="showSendReportModal()" class="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all">
+                    Send Report via Email
+                </button>
+            </div>
+            <form method="GET" action="{% url 'campaign_report' %}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Status</label>
+                    <select name="status" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="">All</option>
+                        <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>Draft</option>
+                        <option value="sending" {% if status_filter == 'sending' %}selected{% endif %}>Sending</option>
+                        <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+                        <option value="failed" {% if status_filter == 'failed' %}selected{% endif %}>Failed</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">User</label>
+                    <select name="user" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="">All Users</option>
+                        {% for u in users %}
+                        <option value="{{ u.id }}" {% if user_filter == u.id|stringformat:"s" %}selected{% endif %}>{{ u.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Date From</label>
+                    <input type="date" name="date_from" value="{{ date_from }}" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Date To</label>
+                    <input type="date" name="date_to" value="{{ date_to }}" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div class="md:col-span-4 flex items-center space-x-4">
+                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all">
+                        Apply Filters
+                    </button>
+                    <a href="{% url 'campaign_report' %}" class="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-all">
+                        Clear Filters
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Campaign List -->
+        <div class="glass-card rounded-2xl p-6">
+            <h3 class="text-gray-900 font-bold text-lg mb-4">Campaigns</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-300">
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Campaign Name</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Subject</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">User</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Status</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Sent</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Failed</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Bounce</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Total</th>
+                            <th class="text-left py-3 px-4 text-gray-700 font-semibold">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in campaigns %}
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="py-3 px-4 text-gray-900 font-semibold">{{ item.campaign.name }}</td>
+                            <td class="py-3 px-4 text-gray-700">{{ item.campaign.subject|truncatewords:8 }}</td>
+                            <td class="py-3 px-4 text-gray-700">
+                                {% if item.campaign.created_by %}
+                                    {{ item.campaign.created_by.username }}
+                                {% else %}
+                                    <span class="text-gray-400">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold 
+                                    {% if item.campaign.status == 'completed' %}bg-green-100 text-green-800 border border-green-300
+                                    {% elif item.campaign.status == 'sending' %}bg-blue-100 text-blue-800 border border-blue-300
+                                    {% elif item.campaign.status == 'failed' %}bg-red-100 text-red-800 border border-red-300
+                                    {% else %}bg-gray-100 text-gray-800 border border-gray-300{% endif %}">
+                                    {{ item.campaign.status }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 text-green-600 font-semibold">{{ item.sent_count }}</td>
+                            <td class="py-3 px-4 text-red-600 font-semibold">{{ item.failed_count }}</td>
+                            <td class="py-3 px-4 text-violet-600 font-semibold">{{ item.bounce_count }}</td>
+                            <td class="py-3 px-4 text-gray-900 font-bold">{{ item.total_emails }}</td>
+                            <td class="py-3 px-4 text-gray-600 text-sm">{{ item.campaign.created_at|date:"M d, Y H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="py-8 text-center text-gray-500">No campaigns found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if campaigns.has_other_pages %}
+            <div class="mt-6 flex items-center justify-center space-x-2">
+                {% if campaigns.has_previous %}
+                <a href="?page={{ campaigns.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}" 
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all">
+                    Previous
+                </a>
+                {% endif %}
+                
+                <span class="px-4 py-2 text-gray-700">
+                    Page {{ campaigns.number }} of {{ campaigns.paginator.num_pages }}
+                </span>
+                
+                {% if campaigns.has_next %}
+                <a href="?page={{ campaigns.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}" 
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Send Report Modal -->
+    <div id="sendReportModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-6 max-w-md w-full relative">
+            <button onclick="closeSendReportModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Send Report via Email</h2>
+            <form id="sendReportForm" onsubmit="sendReport(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Recipient Email</label>
+                        <input type="email" id="reportEmail" required class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="recipient@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Report Type</label>
+                        <select id="reportType" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <option value="campaign">Campaign Report</option>
+                            <option value="email">Email Report</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button type="submit" class="flex-1 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all">
+                            Send Report
+                        </button>
+                        <button type="button" onclick="closeSendReportModal()" class="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-all">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showSendReportModal() {
+            document.getElementById('sendReportModal').classList.remove('hidden');
+        }
+
+        function closeSendReportModal() {
+            document.getElementById('sendReportModal').classList.add('hidden');
+        }
+
+        async function sendReport(e) {
+            e.preventDefault();
+            const email = document.getElementById('reportEmail').value;
+            const reportType = document.getElementById('reportType').value;
+            
+            // Get current filter parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const filters = {
+                status: urlParams.get('status') || '',
+                user: urlParams.get('user') || '',
+                date_from: urlParams.get('date_from') || '',
+                date_to: urlParams.get('date_to') || '',
+            };
+
+            try {
+                const response = await fetch('/api/send-report/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        report_type: reportType,
+                        filters: filters
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Report sent successfully!');
+                    closeSendReportModal();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to send report'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
+

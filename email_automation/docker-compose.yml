@@ -1,0 +1,30 @@
+services:
+  email_automation:
+    build: .
+    container_name: email_automation
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8002:8000"
+    networks:
+      - email_network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
+volumes:
+  static_volume:
+
+networks:
+  email_network:
+    driver: bridge
+

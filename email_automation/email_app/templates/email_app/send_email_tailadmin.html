@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Email - SpaceMail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #c5c7c9;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            padding-top: 140px;
+        }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding-top: 200px;
+            }
+        }
+        @media (max-width: 640px) {
+            .content-wrapper {
+                padding-top: 210px;
+            }
+        }
+        .glass, .glass-card, .status-connected, .status-disconnected, .modal-content {
+            border-top: none;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: visible;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            color: #1f2937;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(102, 126, 234, 0.6);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+            outline: none;
+        }
+        .glass-input::placeholder {
+            color: #9ca3af;
+        }
+        .status-connected {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #48bb78;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .status-connected::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .status-disconnected {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #f5576c;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+        .status-disconnected::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: #c5c7c9;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        .btn-connect {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-connect:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        .btn-disconnect {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-disconnect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+        }
+        .btn-nav {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #667eea;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transition: left 0.4s ease;
+        }
+        .btn-nav:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border-color: rgba(102, 126, 234, 0.6);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            color: #4c51bf;
+        }
+        .btn-nav:hover::before {
+            left: 100%;
+        }
+        .btn-nav span {
+            position: relative;
+            z-index: 1;
+        }
+        .btn-logout {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+        }
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            animation: slideDown 0.4s ease-out;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+            position: relative;
+            overflow: visible;
+        }
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .radio-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .radio-card:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        .radio-card input:checked + .radio-label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid #3b82f6;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-left: 4px solid #f59e0b;
+        }
+        .success-box {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            border-left: 4px solid #10b981;
+        }
+        .error-box {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid #ef4444;
+        }
+        #bodyEditor:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+            pointer-events: none;
+        }
+        #bodyEditor:focus {
+            outline: none;
+        }
+        #bodyEditor ul, #bodyEditor ol {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        #bodyEditor p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <!-- Navigation -->
+    <nav class="glass rounded-2xl p-4 md:p-6 mb-6 flex flex-col md:flex-row items-center gap-4 fixed top-0 left-4 right-4 z-50 mx-auto" style="max-width: calc(100% - 2rem);">
+        <div class="flex items-center space-x-4 md:absolute md:left-4">
+            <div class="p-3 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-xl shadow-lg">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-900">SpaceMail</h1>
+        </div>
+        <div class="flex items-center space-x-3 md:space-x-4 justify-center flex-1" id="sendEmailNavButtons">
+            <!-- Buttons will be dynamically shown based on which provider was clicked -->
+            <a href="{% url 'dashboard' %}" class="btn-nav px-6 py-3 rounded-xl" id="dashboardNavBtn" style="display: none;">
+                <span>Dashboard</span>
+            </a>
+            <button onclick="connectAndGoToGmail()" class="btn-nav px-6 py-3 rounded-xl" id="gmailNavBtn" style="display: none;">
+                <span>Gmail</span>
+            </button>
+            <button onclick="connectAndGoToSpaceMail()" class="btn-nav px-6 py-3 rounded-xl" id="spacemailNavBtn" style="display: none;">
+                <span>SpaceMail</span>
+            </button>
+        </div>
+        <div class="flex items-center space-x-2 md:space-x-3 md:absolute md:right-4">
+            <span class="text-gray-700 font-medium hidden md:inline">Welcome, {{ user.username }}</span>
+            <a href="{% url 'logout' %}" class="btn-logout text-white font-semibold px-4 py-2 rounded-xl shadow-lg">
+                Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+    <!-- Main Content -->
+    <div class="max-w-5xl mx-auto">
+        <!-- SpaceMail Connection Status -->
+        <div id="spacemailConnectionCard" class="glass-card {% if has_credentials %}status-connected{% else %}status-disconnected{% endif %} rounded-2xl p-5 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                {% if has_credentials %}
+                <div class="w-4 h-4 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+                <span class="text-gray-900 font-bold text-lg">Connected to SpaceMail as <strong class="text-green-700">{{ smtp_username }}</strong></span>
+                {% else %}
+                <div class="w-4 h-4 bg-red-400 rounded-full shadow-lg shadow-red-400/50"></div>
+                <span class="text-gray-900 font-bold text-lg">Not connected to SpaceMail</span>
+                {% endif %}
+            </div>
+            <div class="flex items-center space-x-2">
+                {% if has_credentials %}
+                <button 
+                    onclick="disconnectSpacemail()"
+                    class="btn-disconnect text-white px-5 py-2.5 rounded-xl transition-all text-sm font-semibold shadow-lg"
+                >
+                    Disconnect
+                </button>
+                {% endif %}
+                <button 
+                    onclick="openSpacemailModal()"
+                    class="btn-connect text-white px-5 py-2.5 rounded-xl transition-all font-semibold shadow-lg"
+                >
+                    {% if has_credentials %}Reconnect{% else %}Connect to SpaceMail{% endif %}
+                </button>
+            </div>
+        </div>
+
+        <!-- Gmail Connection Status -->
+        <div id="gmailConnectionCard" class="glass-card {% if has_gmail_credentials %}status-connected{% else %}status-disconnected{% endif %} rounded-2xl p-5 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                {% if has_gmail_credentials %}
+                <div class="w-4 h-4 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+                <span class="text-gray-900 font-bold text-lg">Connected to Gmail as <strong class="text-green-700">{{ gmail_username }}</strong> (Port: {{ gmail_port }})</span>
+                {% else %}
+                <div class="w-4 h-4 bg-red-400 rounded-full shadow-lg shadow-red-400/50"></div>
+                <span class="text-gray-900 font-bold text-lg">Not connected to Gmail</span>
+                {% endif %}
+            </div>
+            <div class="flex items-center space-x-2">
+                {% if has_gmail_credentials %}
+                <button 
+                    onclick="disconnectGmail()"
+                    class="btn-disconnect text-white px-5 py-2.5 rounded-xl transition-all text-sm font-semibold shadow-lg"
+                >
+                    Disconnect
+                </button>
+                {% endif %}
+                <button 
+                    onclick="openGmailModal()"
+                    class="btn-connect text-white px-5 py-2.5 rounded-xl transition-all font-semibold shadow-lg"
+                >
+                    {% if has_gmail_credentials %}Reconnect{% else %}Connect to Gmail{% endif %}
+                </button>
+            </div>
+        </div>
+
+        <!-- Email Form -->
+        <div class="glass-card rounded-2xl p-6 md:p-8">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center">
+                <span class="mr-3 p-2 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-lg">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                </span>
+                Send Email
+            </h2>
+            
+            <form id="emailForm" class="space-y-6">
+                {% csrf_token %}
+                <input type="hidden" name="use_csv" value="true">
+                
+                <!-- Connection Warning -->
+                {% if not has_credentials and not has_gmail_credentials %}
+                <div class="warning-box rounded-xl p-4 mb-4">
+                    <p class="text-yellow-900 text-sm font-semibold flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        Please connect to SpaceMail or Gmail before sending emails.
+                    </p>
+                </div>
+                {% endif %}
+
+                <!-- Campaign Name Field -->
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">Campaign Name</label>
+                    <input 
+                        type="text" 
+                        name="campaign_name" 
+                        id="campaign_name"
+                        class="glass-input w-full px-5 py-4 rounded-xl focus:outline-none text-lg"
+                        placeholder="Enter campaign name (e.g., Summer Sale 2024)"
+                    >
+                    <p class="text-gray-600 text-xs mt-2">Give your email campaign a descriptive name</p>
+                </div>
+
+                <!-- Bulk Email Fields -->
+                <div id="bulkEmailFields">
+                    <div>
+                        <label class="block text-gray-900 font-semibold text-sm mb-2">CSV File</label>
+                        <input 
+                            type="file" 
+                            name="csv_file" 
+                            id="csv_file"
+                            accept=".csv"
+                            class="glass-input w-full px-5 py-4 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-900 hover:file:bg-gray-200"
+                            onchange="parseCSVColumns()"
+                        >
+                        <p class="text-gray-600 text-xs mt-2">Upload a CSV file with recipient emails and attributes</p>
+                    </div>
+                    
+                    <!-- CSV Attributes Display -->
+                    <div id="csvAttributesDisplay" class="hidden mt-4">
+                        <div class="inner-card rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-gray-900 font-bold text-sm flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    CSV Attributes Detected
+                                </h4>
+                                <span id="csvRowCount" class="text-gray-600 text-xs font-semibold"></span>
+                            </div>
+                            <div id="csvAttributesList" class="flex flex-wrap gap-2">
+                                <!-- Attributes will be displayed here -->
+                            </div>
+                            <p class="text-gray-600 text-xs mt-3">Use these attributes in your email body with <code class="bg-gray-200 px-1 rounded">{attribute_name}</code> format</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">Subject</label>
+                    <input 
+                        type="text" 
+                        name="subject" 
+                        id="subject"
+                        required
+                        class="glass-input w-full px-5 py-4 rounded-xl focus:outline-none text-lg"
+                        placeholder="Email subject"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">Body</label>
+                    <!-- Rich Text Editor Toolbar -->
+                    <div class="glass-input rounded-t-xl border-b border-gray-200 p-2 flex items-center space-x-2 flex-wrap">
+                        <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-gray-100 rounded transition-all font-bold" title="Bold">
+                            <span class="text-gray-700 text-sm">B</span>
+                        </button>
+                        <button type="button" onclick="formatText('italic')" class="p-2 hover:bg-gray-100 rounded transition-all italic" title="Italic">
+                            <span class="text-gray-700 text-sm">I</span>
+                        </button>
+                        <button type="button" onclick="formatText('underline')" class="p-2 hover:bg-gray-100 rounded transition-all underline" title="Underline">
+                            <span class="text-gray-700 text-sm">U</span>
+                        </button>
+                        <div class="w-px h-6 bg-gray-300"></div>
+                        <button type="button" onclick="formatText('insertUnorderedList')" class="p-2 hover:bg-gray-100 rounded transition-all" title="Bullet List">
+                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                                <circle cx="3" cy="6" r="1" fill="currentColor"></circle>
+                                <circle cx="3" cy="10" r="1" fill="currentColor"></circle>
+                                <circle cx="3" cy="14" r="1" fill="currentColor"></circle>
+                                <circle cx="3" cy="18" r="1" fill="currentColor"></circle>
+                            </svg>
+                        </button>
+                        <button type="button" onclick="formatText('insertOrderedList')" class="p-2 hover:bg-gray-100 rounded transition-all" title="Numbered List">
+                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                                <text x="2" y="8" font-size="8" fill="currentColor">1.</text>
+                                <text x="2" y="12" font-size="8" fill="currentColor">2.</text>
+                                <text x="2" y="16" font-size="8" fill="currentColor">3.</text>
+                                <text x="2" y="20" font-size="8" fill="currentColor">4.</text>
+                            </svg>
+                        </button>
+                        <div class="w-px h-6 bg-gray-300"></div>
+                        <button type="button" onclick="insertLink()" class="p-2 hover:bg-gray-100 rounded transition-all" title="Insert Link">
+                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                            </svg>
+                        </button>
+                        <button type="button" onclick="formatText('removeFormat')" class="p-2 hover:bg-gray-100 rounded transition-all" title="Clear Formatting">
+                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Rich Text Editor Content -->
+                    <div 
+                        id="bodyEditor" 
+                        contenteditable="true"
+                        class="glass-input rounded-b-xl px-5 py-4 min-h-[200px] focus:outline-none text-lg"
+                        style="border-top: none;"
+                        data-placeholder="Email body (use {attribute_name} for personalization)"
+                    ></div>
+                    <!-- Hidden textarea to store HTML content -->
+                    <textarea 
+                        name="body" 
+                        id="body"
+                        required
+                        style="display: none;"
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">Attributes (Optional)</label>
+                    <input 
+                        type="text" 
+                        name="attributes" 
+                        id="attributes"
+                        class="glass-input w-full px-5 py-4 rounded-xl focus:outline-none text-lg"
+                        placeholder="First Name: John, Company Name: Acme Inc"
+                    >
+                    <p class="text-gray-600 text-xs mt-2">Format: key1: value1, key2: value2</p>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center cursor-pointer glass-card px-4 py-3 rounded-xl">
+                        <input type="checkbox" name="is_html" id="is_html" class="mr-3 w-5 h-5">
+                        <span class="text-gray-900 font-semibold">Send as HTML</span>
+                    </label>
+                </div>
+
+                <div id="attachmentField">
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">Attachment (Optional)</label>
+                    <input 
+                        type="file" 
+                        name="attachment" 
+                        id="attachment"
+                        class="glass-input w-full px-5 py-4 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-900 hover:file:bg-gray-200"
+                    >
+                </div>
+
+                <button 
+                    type="submit"
+                    id="submitBtn"
+                    class="btn-submit w-full text-white font-bold py-4 px-6 rounded-xl text-lg shadow-xl transition-all {% if not has_credentials and not has_gmail_credentials %}opacity-60 cursor-not-allowed{% else %}hover:shadow-2xl hover:scale-105{% endif %}"
+                    {% if not has_credentials and not has_gmail_credentials %}disabled title="Please connect to SpaceMail or Gmail first to send emails"{% endif %}
+                >
+                    Send Email
+                </button>
+            </form>
+
+            <!-- Response Message -->
+            <div id="responseMessage" class="mt-6 hidden rounded-xl p-4"></div>
+        </div>
+    </div>
+
+    <!-- Gmail Connection Modal -->
+    <div id="gmailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-overlay">
+        <div class="modal-content rounded-3xl p-8 max-w-md w-full shadow-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="p-3 bg-gradient-to-br from-red-500 via-pink-500 to-blue-500 rounded-xl">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-gray-900">Connect to Gmail</h3>
+                </div>
+                <button onclick="closeGmailModal()" class="text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="gmailForm" class="space-y-5">
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">Gmail Email</label>
+                    <input 
+                        type="email" 
+                        id="gmail_username"
+                        required
+                        class="glass-input w-full px-5 py-4 rounded-xl focus:outline-none text-lg"
+                        placeholder="your-email@gmail.com"
+                        {% if has_gmail_credentials %}value="{{ gmail_username }}"{% endif %}
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">App Password</label>
+                    <input 
+                        type="password" 
+                        id="gmail_password"
+                        required
+                        class="glass-input w-full px-5 py-4 rounded-xl focus:outline-none text-lg"
+                        placeholder="Enter your Gmail App Password"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">SMTP Port</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="radio-card cursor-pointer rounded-xl p-3 text-center">
+                            <input type="radio" name="gmail_port" value="587" class="hidden" {% if gmail_port == 587 or not gmail_port %}checked{% endif %}>
+                            <span class="radio-label block font-semibold text-gray-900 py-2 px-3 rounded-lg transition-all">
+                                587 (TLS)
+                            </span>
+                        </label>
+                        <label class="radio-card cursor-pointer rounded-xl p-3 text-center">
+                            <input type="radio" name="gmail_port" value="465" class="hidden" {% if gmail_port == 465 %}checked{% endif %}>
+                            <span class="radio-label block font-semibold text-gray-900 py-2 px-3 rounded-lg transition-all">
+                                465 (SSL)
+                            </span>
+                        </label>
+                        <label class="radio-card cursor-pointer rounded-xl p-3 text-center">
+                            <input type="radio" name="gmail_port" value="25" class="hidden" {% if gmail_port == 25 %}checked{% endif %}>
+                            <span class="radio-label block font-semibold text-gray-900 py-2 px-3 rounded-lg transition-all">
+                                25 (SMTP)
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="info-box rounded-xl p-4">
+                    <p class="text-blue-900 text-sm font-medium">
+                        <strong class="text-blue-800">Server:</strong> smtp.gmail.com<br>
+                        <strong class="text-blue-800">Recommended:</strong> Port 587 (TLS) or 465 (SSL)
+                    </p>
+                </div>
+
+                <div id="gmailConnectionStatus" class="hidden"></div>
+
+                <div class="flex space-x-3">
+                    <button 
+                        type="button"
+                        onclick="closeGmailModal()"
+                        class="flex-1 glass-card hover:bg-gray-100 text-gray-900 font-semibold px-5 py-3 rounded-xl transition-all"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        type="submit"
+                        id="gmailConnectBtn"
+                        class="flex-1 btn-connect text-white font-bold px-5 py-3 rounded-xl shadow-lg transition-all"
+                    >
+                        Connect
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SpaceMail Connection Modal -->
+    <div id="spacemailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-overlay">
+        <div class="modal-content rounded-3xl p-8 max-w-md w-full shadow-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="p-3 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-xl">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-gray-900">Connect to SpaceMail</h3>
+                </div>
+                <button onclick="closeSpacemailModal()" class="text-gray-600 hover:text-gray-900 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="spacemailForm" class="space-y-5">
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">SpaceMail Email</label>
+                    <input 
+                        type="email" 
+                        id="smtp_username"
+                        required
+                        class="glass-input w-full px-5 py-4 rounded-xl focus:outline-none text-lg"
+                        placeholder="your-email@spacemail.com"
+                        {% if has_credentials %}value="{{ smtp_username }}"{% endif %}
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-gray-900 font-semibold text-sm mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="smtp_password"
+                        required
+                        class="glass-input w-full px-5 py-4 rounded-xl focus:outline-none text-lg"
+                        placeholder="Enter your SpaceMail password"
+                    >
+                </div>
+
+                <div class="info-box rounded-xl p-4">
+                    <p class="text-blue-900 text-sm font-medium">
+                        <strong class="text-blue-800">Server:</strong> mail.spacemail.com<br>
+                        <strong class="text-blue-800">Port:</strong> 465 (SSL)
+                    </p>
+                </div>
+
+                <div id="connectionStatus" class="hidden"></div>
+
+                <div class="flex space-x-3">
+                    <button 
+                        type="button"
+                        onclick="closeSpacemailModal()"
+                        class="flex-1 glass-card hover:bg-gray-100 text-gray-900 font-semibold px-5 py-3 rounded-xl transition-all"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        type="submit"
+                        id="connectBtn"
+                        class="flex-1 btn-connect text-white font-bold px-5 py-3 rounded-xl shadow-lg transition-all"
+                    >
+                        Connect
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Set bulk email mode by default
+        // Navigation functions for send email page
+        function connectAndGoToGmail() {
+            // Hide SpaceMail connection card
+            const spacemailCard = document.getElementById('spacemailConnectionCard');
+            if (spacemailCard) {
+                spacemailCard.style.display = 'none';
+            }
+            // Show SpaceMail and Dashboard buttons in navigation
+            const spacemailNavBtn = document.getElementById('spacemailNavBtn');
+            const dashboardNavBtn = document.getElementById('dashboardNavBtn');
+            const gmailNavBtn = document.getElementById('gmailNavBtn');
+            if (spacemailNavBtn) spacemailNavBtn.style.display = 'block';
+            if (dashboardNavBtn) dashboardNavBtn.style.display = 'block';
+            if (gmailNavBtn) gmailNavBtn.style.display = 'none';
+            // Open Gmail modal
+            openGmailModal();
+        }
+
+        function connectAndGoToSpaceMail() {
+            // Hide Gmail connection card
+            const gmailCard = document.getElementById('gmailConnectionCard');
+            if (gmailCard) {
+                gmailCard.style.display = 'none';
+            }
+            // Show Gmail and Dashboard buttons in navigation
+            const gmailNavBtn = document.getElementById('gmailNavBtn');
+            const dashboardNavBtn = document.getElementById('dashboardNavBtn');
+            const spacemailNavBtn = document.getElementById('spacemailNavBtn');
+            if (gmailNavBtn) gmailNavBtn.style.display = 'block';
+            if (dashboardNavBtn) dashboardNavBtn.style.display = 'block';
+            if (spacemailNavBtn) spacemailNavBtn.style.display = 'none';
+            // Open SpaceMail modal
+            openSpacemailModal();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ensure CSV file is required
+            const csvFile = document.getElementById('csv_file');
+            if (csvFile) {
+                csvFile.required = true;
+            }
+            
+            // Check if we should open Gmail or SpaceMail modal
+            const shouldOpenGmail = sessionStorage.getItem('openGmailModal');
+            const shouldOpenSpaceMail = sessionStorage.getItem('openSpaceMailModal');
+            
+            if (shouldOpenGmail === 'true') {
+                sessionStorage.removeItem('openGmailModal');
+                // Hide SpaceMail connection card
+                const spacemailCard = document.getElementById('spacemailConnectionCard');
+                if (spacemailCard) {
+                    spacemailCard.style.display = 'none';
+                }
+                // Show SpaceMail and Dashboard buttons in navigation
+                const spacemailNavBtn = document.getElementById('spacemailNavBtn');
+                const dashboardNavBtn = document.getElementById('dashboardNavBtn');
+                const gmailNavBtn = document.getElementById('gmailNavBtn');
+                if (spacemailNavBtn) spacemailNavBtn.style.display = 'block';
+                if (dashboardNavBtn) dashboardNavBtn.style.display = 'block';
+                if (gmailNavBtn) gmailNavBtn.style.display = 'none';
+                // Small delay to ensure page is fully loaded
+                setTimeout(() => {
+                    openGmailModal();
+                }, 300);
+            } else if (shouldOpenSpaceMail === 'true') {
+                sessionStorage.removeItem('openSpaceMailModal');
+                // Hide Gmail connection card
+                const gmailCard = document.getElementById('gmailConnectionCard');
+                if (gmailCard) {
+                    gmailCard.style.display = 'none';
+                }
+                // Show Gmail and Dashboard buttons in navigation
+                const gmailNavBtn = document.getElementById('gmailNavBtn');
+                const dashboardNavBtn = document.getElementById('dashboardNavBtn');
+                const spacemailNavBtn = document.getElementById('spacemailNavBtn');
+                if (gmailNavBtn) gmailNavBtn.style.display = 'block';
+                if (dashboardNavBtn) dashboardNavBtn.style.display = 'block';
+                if (spacemailNavBtn) spacemailNavBtn.style.display = 'none';
+                // Small delay to ensure page is fully loaded
+                setTimeout(() => {
+                    openSpacemailModal();
+                }, 300);
+            }
+        });
+
+        // SpaceMail Modal Functions
+        function openSpacemailModal() {
+            document.getElementById('spacemailModal').classList.remove('hidden');
+            document.getElementById('spacemailModal').classList.add('flex');
+            // Pre-fill email if already connected (password field stays empty for security)
+            {% if has_credentials %}
+            document.getElementById('smtp_username').value = '{{ smtp_username }}';
+            {% endif %}
+        }
+
+        function closeSpacemailModal() {
+            document.getElementById('spacemailModal').classList.add('hidden');
+            document.getElementById('spacemailModal').classList.remove('flex');
+            document.getElementById('connectionStatus').classList.add('hidden');
+            document.getElementById('spacemailForm').reset();
+        }
+
+        // Connect to SpaceMail
+        document.getElementById('spacemailForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('smtp_username').value;
+            const password = document.getElementById('smtp_password').value;
+            const statusDiv = document.getElementById('connectionStatus');
+            const connectBtn = document.getElementById('connectBtn');
+            
+            connectBtn.disabled = true;
+            connectBtn.textContent = 'Connecting...';
+            statusDiv.classList.remove('hidden');
+            statusDiv.className = 'info-box rounded-xl p-4';
+            statusDiv.innerHTML = '<div class="text-blue-900 text-sm font-medium">Testing connection...</div>';
+            
+            try {
+                const response = await fetch('{% url "test_smtp_connection" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.className = 'success-box rounded-xl p-4';
+                    statusDiv.innerHTML = '<div class="text-green-800 text-sm font-semibold">✓ Connection successful!</div>';
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    statusDiv.className = 'error-box rounded-xl p-4';
+                    statusDiv.innerHTML = `<div class="text-red-800 text-sm font-semibold">✗ ${data.error || 'Connection failed'}</div>`;
+                    connectBtn.disabled = false;
+                    connectBtn.textContent = 'Connect';
+                }
+            } catch (error) {
+                statusDiv.className = 'error-box rounded-xl p-4';
+                statusDiv.innerHTML = `<div class="text-red-800 text-sm font-semibold">✗ Error: ${error.message}</div>`;
+                connectBtn.disabled = false;
+                connectBtn.textContent = 'Connect';
+            }
+        });
+
+        // Disconnect from SpaceMail
+        async function disconnectSpacemail() {
+            if (!confirm('Are you sure you want to disconnect from SpaceMail?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('{% url "spacemail_logout" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error disconnecting: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Parse CSV columns
+        async function parseCSVColumns() {
+            const fileInput = document.getElementById('csv_file');
+            const attributesDisplay = document.getElementById('csvAttributesDisplay');
+            const attributesList = document.getElementById('csvAttributesList');
+            const rowCount = document.getElementById('csvRowCount');
+            
+            if (!fileInput.files.length) {
+                attributesDisplay.classList.add('hidden');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('csv_file', fileInput.files[0]);
+            
+            // Show loading state
+            attributesDisplay.classList.remove('hidden');
+            attributesList.innerHTML = '<div class="text-gray-600 text-sm">Loading CSV attributes...</div>';
+            
+            try {
+                const response = await fetch('{% url "parse_csv_columns" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (data.success && data.columns && data.columns.length > 0) {
+                    // Clear previous attributes
+                    attributesList.innerHTML = '';
+                    
+                    // Display each attribute as a badge
+                    data.columns.forEach(column => {
+                        const badge = document.createElement('div');
+                        badge.className = 'px-3 py-1.5 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg border border-purple-200';
+                        badge.innerHTML = `
+                            <span class="text-gray-900 font-semibold text-xs">${column}</span>
+                            <code class="ml-2 text-purple-600 text-xs font-mono">{${column.toLowerCase().replace(/\s+/g, '_')}}</code>
+                        `;
+                        attributesList.appendChild(badge);
+                    });
+                    
+                    // Show row count if available
+                    if (data.row_count) {
+                        rowCount.textContent = `${data.row_count} recipients`;
+                    }
+                    
+                    console.log('CSV columns:', data.columns);
+                } else {
+                    attributesList.innerHTML = '<div class="text-red-600 text-sm">No columns found in CSV file</div>';
+                }
+            } catch (error) {
+                console.error('Error parsing CSV:', error);
+                attributesList.innerHTML = '<div class="text-red-600 text-sm">Error parsing CSV: ' + error.message + '</div>';
+            }
+        }
+
+        // Rich Text Editor Functions
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('bodyEditor').focus();
+        }
+        
+        function insertLink() {
+            const url = prompt('Enter URL:', 'https://');
+            if (url && url !== 'https://') {
+                formatText('createLink', url);
+            }
+        }
+        
+        // Sync editor content to hidden textarea
+        function syncEditorContent() {
+            const editor = document.getElementById('bodyEditor');
+            const textarea = document.getElementById('body');
+            const htmlContent = editor.innerHTML.trim();
+            
+            // If editor has content, set it to textarea and check HTML checkbox
+            if (htmlContent && htmlContent !== '<br>') {
+                textarea.value = htmlContent;
+                document.getElementById('is_html').checked = true;
+            } else {
+                textarea.value = '';
+            }
+        }
+        
+        // Initialize editor
+        document.addEventListener('DOMContentLoaded', function() {
+            const editor = document.getElementById('bodyEditor');
+            if (editor) {
+                // Sync on input
+                editor.addEventListener('input', syncEditorContent);
+                editor.addEventListener('blur', syncEditorContent);
+                
+                // Prevent paste of unwanted formatting
+                editor.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                    document.execCommand('insertText', false, text);
+                });
+            }
+        });
+        
+        // Submit email form
+        document.getElementById('emailForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Sync editor content before submission
+            syncEditorContent();
+            
+            const formData = new FormData(this);
+            const emailType = 'bulk'; // Always use bulk mode
+            
+            // Store form data for dashboard
+            const emailData = {
+                emailType: emailType,
+                campaign_name: document.getElementById('campaign_name')?.value || '',
+                subject: document.getElementById('subject').value,
+                body: document.getElementById('body').value,
+                attributes: document.getElementById('attributes')?.value || '',
+                is_html: document.getElementById('is_html').checked,
+                has_csv: document.getElementById('csv_file')?.files.length > 0,
+                has_attachment: document.getElementById('attachment')?.files.length > 0
+            };
+            
+            // Store in sessionStorage
+            sessionStorage.setItem('emailSending', 'true');
+            sessionStorage.setItem('emailData', JSON.stringify(emailData));
+            sessionStorage.setItem('emailFormData', 'pending');
+            
+            // Store file data if exists (for CSV and attachments)
+            if (document.getElementById('csv_file')?.files.length > 0) {
+                const csvFile = document.getElementById('csv_file').files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    sessionStorage.setItem('csvFileData', e.target.result);
+                    sessionStorage.setItem('csvFileName', csvFile.name);
+                    // Redirect after file is read
+                    window.location.href = '{% url "dashboard" %}';
+                };
+                reader.readAsDataURL(csvFile);
+            } else if (document.getElementById('attachment')?.files.length > 0) {
+                const attachFile = document.getElementById('attachment').files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    sessionStorage.setItem('attachmentFileData', e.target.result);
+                    sessionStorage.setItem('attachmentFileName', attachFile.name);
+                    // Redirect after file is read
+                    window.location.href = '{% url "dashboard" %}';
+                };
+                reader.readAsDataURL(attachFile);
+            } else {
+                // Redirect immediately if no files
+                window.location.href = '{% url "dashboard" %}';
+            }
+        });
+
+        // Close modal on outside click
+        document.getElementById('spacemailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSpacemailModal();
+            }
+        });
+
+        // Gmail Modal Functions
+        function openGmailModal() {
+            document.getElementById('gmailModal').classList.remove('hidden');
+            document.getElementById('gmailModal').classList.add('flex');
+            {% if has_gmail_credentials %}
+            document.getElementById('gmail_username').value = '{{ gmail_username }}';
+            {% endif %}
+        }
+
+        function closeGmailModal() {
+            document.getElementById('gmailModal').classList.add('hidden');
+            document.getElementById('gmailModal').classList.remove('flex');
+            document.getElementById('gmailConnectionStatus').classList.add('hidden');
+            document.getElementById('gmailForm').reset();
+        }
+
+        // Connect to Gmail
+        document.getElementById('gmailForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('gmail_username').value;
+            const password = document.getElementById('gmail_password').value;
+            const port = document.querySelector('input[name="gmail_port"]:checked').value;
+            const statusDiv = document.getElementById('gmailConnectionStatus');
+            const connectBtn = document.getElementById('gmailConnectBtn');
+            
+            connectBtn.disabled = true;
+            connectBtn.textContent = 'Connecting...';
+            statusDiv.classList.remove('hidden');
+            statusDiv.className = 'info-box rounded-xl p-4';
+            statusDiv.innerHTML = '<div class="text-blue-900 text-sm font-medium">Testing connection...</div>';
+            
+            try {
+                const response = await fetch('{% url "test_gmail_connection" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        port: parseInt(port)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.className = 'success-box rounded-xl p-4';
+                    statusDiv.innerHTML = '<div class="text-green-800 text-sm font-semibold">✓ Connection successful!</div>';
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    // Show error in popup modal
+                    showErrorModal('Gmail Connection Error', data.error || 'Connection failed');
+                    statusDiv.classList.add('hidden');
+                    connectBtn.disabled = false;
+                    connectBtn.textContent = 'Connect';
+                }
+            } catch (error) {
+                // Show error in popup modal
+                showErrorModal('Gmail Connection Error', `Network error: ${error.message}`);
+                statusDiv.classList.add('hidden');
+                connectBtn.disabled = false;
+                connectBtn.textContent = 'Connect';
+            }
+        });
+
+        // Disconnect from Gmail
+        async function disconnectGmail() {
+            if (!confirm('Are you sure you want to disconnect from Gmail?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('{% url "gmail_logout" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error disconnecting: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Close Gmail modal on outside click
+        document.getElementById('gmailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGmailModal();
+            }
+        });
+
+        // Error Modal Functions
+        function showErrorModal(title, message) {
+            // Create or get error modal
+            let errorModal = document.getElementById('errorModal');
+            if (!errorModal) {
+                errorModal = document.createElement('div');
+                errorModal.id = 'errorModal';
+                errorModal.className = 'fixed inset-0 z-50 hidden items-center justify-center p-4 modal-overlay';
+                errorModal.innerHTML = `
+                    <div class="modal-content rounded-3xl p-8 max-w-md w-full shadow-2xl">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-3 bg-gradient-to-br from-red-500 via-pink-500 to-blue-500 rounded-xl">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-extrabold text-gray-900" id="errorModalTitle">Error</h3>
+                            </div>
+                            <button onclick="closeErrorModal()" class="text-gray-600 hover:text-gray-900 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="error-box rounded-xl p-4 mb-6">
+                            <p class="text-red-800 text-sm font-medium" id="errorModalMessage"></p>
+                        </div>
+                        <div class="flex justify-end">
+                            <button 
+                                onclick="closeErrorModal()"
+                                class="btn-connect text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(errorModal);
+                
+                // Close on outside click
+                errorModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeErrorModal();
+                    }
+                });
+            }
+            
+            // Set title and message
+            document.getElementById('errorModalTitle').textContent = title;
+            document.getElementById('errorModalMessage').textContent = message;
+            
+            // Show modal
+            errorModal.classList.remove('hidden');
+            errorModal.classList.add('flex');
+        }
+
+        function closeErrorModal() {
+            const errorModal = document.getElementById('errorModal');
+            if (errorModal) {
+                errorModal.classList.add('hidden');
+                errorModal.classList.remove('flex');
+            }
+        }
+    </script>
+    </div>
+    <!-- End Content Wrapper -->
+</body>
+</html>
