@@ -3,7 +3,7 @@ services:
     build: .
     container_name: email_automation
     env_file:
-      - ./.env
+      - /Users/natarajan/Documents/spacemail Automations/email_automation/.env
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
