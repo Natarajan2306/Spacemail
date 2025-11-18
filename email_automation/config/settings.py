@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-this-in-production'
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # ALLOWED_HOSTS - always include Render domain even if set via env var
-allowed_hosts_default = 'localhost,127.0.0.1,spacemail.pdevsecops.com,spacemail-u779.onrender.com'
+allowed_hosts_default = 'localhost,127.0.0.1,spacemail.pdevsecops.com,spacemail-u779.onrender.com,pdsolearn.com'
 allowed_hosts_env = os.getenv('ALLOWED_HOSTS', allowed_hosts_default)
 
 # Parse and clean hosts
@@ -35,7 +35,7 @@ if not any(host.lower() == render_domain.lower() for host in ALLOWED_HOSTS):
 
 # Ensure we have at least the default hosts if list is empty
 if not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'spacemail.pdevsecops.com', render_domain]
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'spacemail.pdevsecops.com', render_domain, 'pdsolearn.com']
 
 # CSRF Settings
 csrf_origins_env = os.getenv('CSRF_TRUSTED_ORIGINS', '')
