@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SpaceMail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        .logo-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: particleFloat 20s infinite;
+        }
+        @keyframes particleFloat {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Animated Particles -->
+    <div class="particle w-20 h-20" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle w-16 h-16" style="left: 30%; animation-delay: 2s;"></div>
+    <div class="particle w-24 h-24" style="left: 50%; animation-delay: 4s;"></div>
+    <div class="particle w-18 h-18" style="left: 70%; animation-delay: 6s;"></div>
+    <div class="particle w-22 h-22" style="left: 90%; animation-delay: 8s;"></div>
+
+    <div class="glass rounded-3xl p-8 md:p-10 w-full max-w-md z-10 floating">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="inline-block p-4 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-2xl mb-4 shadow-2xl">
+                <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h1 class="text-5xl font-extrabold logo-gradient mb-2">SpaceMail</h1>
+            <p class="text-white/90 text-lg font-medium">Welcome back! Please login to continue.</p>
+        </div>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="mb-6 p-4 bg-gradient-to-r from-red-500/30 to-pink-500/30 border-2 border-red-400/50 rounded-xl backdrop-blur-sm shadow-lg">
+            <p class="text-red-100 text-sm font-medium">{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form method="POST" action="{% url 'login' %}" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="username" class="block text-white font-semibold text-sm mb-2">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    required
+                    class="glass-input w-full px-5 py-4 rounded-xl text-white placeholder-white/60 focus:outline-none text-lg"
+                    placeholder="Enter your username"
+                >
+            </div>
+
+            <div>
+                <label for="password" class="block text-white font-semibold text-sm mb-2">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required
+                    class="glass-input w-full px-5 py-4 rounded-xl text-white placeholder-white/60 focus:outline-none text-lg"
+                    placeholder="Enter your password"
+                >
+            </div>
+
+            <button 
+                type="submit"
+                class="btn-primary w-full text-white font-bold py-4 px-6 rounded-xl text-lg shadow-xl"
+            >
+                Sign In
+            </button>
+        </form>
+
+        <!-- Signup Link -->
+        <div class="mt-8 text-center">
+            <p class="text-white/90 text-sm">
+                Don't have an account? 
+                <a href="{% url 'signup' %}" class="text-white font-bold hover:text-yellow-300 underline transition-colors duration-300">
+                    Sign up now
+                </a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
